@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title><%= title %></title>
+<link rel="stylesheet" href="/stylesheets/main.css" />
+<script src = "/javascripts/jquery-2.1.4.min.js"></script>
+<script src = "/javascripts/jquery.validate.min.js"></script>
+<script charset="utf-8" src ="/javascripts/jquerysession.js"></script>
+
+</head>
+
+<body>
+<div class="message-error"><span></span></div>
+<div class="message-info"><span></span></div>
+<% if (success) { %>
+	<div class="message-prompt"><span><%= success %></span></div>
+<% } %>
+<% if (error) { %>
+	<div class="message-prompt error"><span><%= error %></span></div>
+<% } %>
+<div id = "nav">
+  <div class = "nav-center">
+    <div class = "nav-header">
+        <a href = "/" target="_blank">vBlog</a>
+      </div>
+    <ul class = "nav-left">
+        <li><a href = "#" target="_blank">八卦互联网</a></li>
+        <li><a href = "#" target="_blank">干货分享</a></li>
+        <li><a href = "#" target="_blank">码农进阶</a></li>
+        <li><a href = "#" target="_blank">寻找组织</a></li>
+      </ul>
+      <ul class = "nav-right">
+        <li class = "gongzhonghao">
+          <a href = "#"><i class="icon icon-sm-phone"></i>公众号</a>
+          <div class="app-guide-box" >
+                  <img src="/images/qrcode@100.gif">              
+              <div class="app-guide-title">
+                  <span>微信扫一扫</span>
+              </div>
+           </div>
+        </li>
+        <li><a href = "#"><i class="icon icon-search"></i>搜索</a></li>
+        <% if (user) { %>
+        	<li><a href="/u/<%=user.name%>" target="_blank">你好，<%=user.name%></a></li>
+          <!-- <input type = "hidden" value = "<%=user.name%>" id = "nowUserName"/> -->
+          <li><a title="登出" href="/logout">退出登录</a></li>
+    	 <% } else{ %>
+	        <li><a href = "/login">登录</a></li>
+	        <li><a href = "/reg">注册</a></li>
+        <% } %>	
+        <li><a href = "/post" target="_blank">投稿</a></li>
+      </ul>
+  </div>
+</div>

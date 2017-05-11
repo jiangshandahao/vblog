@@ -1,0 +1,61 @@
+<%- include header %>
+
+<div style = "width:100%; height:40px; min-width: 960px; clear:both;"></div>
+<form id="signupForm" method="post">
+<div class="login-warp">
+  <div class="login-container">
+      <div class="login-box">
+          <div class="ordinary-login">
+              <ul class="tab-box">
+                 <a href="/login"><li data-type="login" >登录</li></a>
+                 <a href="/reg"><li data-type="register" class="active">注册</li></a>
+              </ul>
+              <div class="login-form-box">
+                  
+                  <div class="register">
+<!--注册-->
+                    <div class="form-group">
+                        <input class="login-input" id="regphone" type="text" name="mobile" placeholder="手机号">
+                    </div>
+                    <div class="form-group shoujiyanzheng">
+                        <input  class="login-input ver-code" id="captchaphone" name="captchaphone" placeholder="验证码">
+                        <input id="btnSendCode" class="btn-ver-code" type="button" value="点击获取" />
+                    </div>
+                    <div class="form-group shoujiyanzheng">
+                      <input class="login-input" id="username" name="username"  placeholder="用户名（您评论时显示的名字）">
+                    </div>
+                    <div class="form-group shoujiyanzheng">
+                        <input class="login-input" id="password" type="password" name="password"  placeholder="密码">
+                    </div>
+                    <div class="form-group shoujiyanzheng">
+                    	<label for="confirm_password" class = "hide">确认密码：</label>
+                        <input class="login-input" id="password_repeat" type="password" name="password_repeat" placeholder="确认密码">
+                    </div>
+                    <div class="form-group">
+
+                        <input type="submit" class="btn-login" id = "embed-submit" value= "注册" />
+                    </div>
+                  </div>
+                  
+                  <div class="lgn-three-title">
+                      第三方登录
+                  </div>
+                  <div class="lgn-three-btn-box">
+                      <ul>
+                          <li><a href="#"><i class="icon icon-three icon-three-qq"></i></a></li>
+                          <li><a href="#"><i class="icon icon-three icon-three-wb"></i></a></li>
+                          <li><a href="#"><i class="icon icon-three icon-three-wx"></i></a></li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+
+      </div>
+  </div>
+</div>
+</form>
+
+
+<script src = "/javascripts/signup.js"></script>
+
+<%- include footer %>
