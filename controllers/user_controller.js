@@ -28,7 +28,7 @@ var validatePassword =  function(password){
 
 var getUserByMobile = function(mobile){
 	UserModel.findOne({'mobile':mobile})
-	  .exec(function(){
+	  .exec(function(err,user){
 	  	console.log(user);
 	  	if(err){
 	  		return false; 
@@ -69,20 +69,22 @@ exports.signUpValidate = function(req, res, next){
 
 //注册，向数据库存储新用户
 exports.signUp = function(req, res){
-
   var userModel = new UserModel({
   	'username':req.body.username,
   	'mobile':req.body.mobile,
   	'hashed_password': hashPW(req.body.password)
   });  
   
-  userModel.save(function(err) {
+  userModel.save(function(err, user) {
     if (err){
     	  req.flash('error', "注册用户失败");
       res.redirect('/signup');
     } else {
-    	  req.flash('success','注册成功');
-      res.redirect('/');
+    		req.session.regenerate(function(){
+	        req.session.user = user;
+	        req.flash('success', '注册成功');
+			res.redirect('/');
+	     });
     }
   });
 };
@@ -150,16 +152,11 @@ exports.logIn = function(req, res){
 		res.redirect('/login');
     } else if (user.hashed_password === 
                hashPW(req.body.password.toString())) {
-//    req.session.regenerate(function(){
-//      req.session.user = user.id;
-//      req.session.username = user.username;
-//      req.session.msg = 'Authenticated as ' + user.username;
-//      res.redirect('/');
-//    });
-
-		req.flash('success', '登录成功');
-		res.redirect('/');
-		
+	     req.session.regenerate(function(){
+	        req.session.user = user;
+	        req.flash('success', '登录成功');
+			res.redirect('/');
+	     });
     }else{
 	    	req.flash('error', "手机号码或密码错误");
 	    	res.redirect('/login');
@@ -169,4 +166,15 @@ exports.logIn = function(req, res){
 	    	res.redirect('/login');
     }
   });
+};
+
+//修改用户信息
+
+exports.updateUserInfo = function(req, res){
+ 	res.render('user_info', { 
+      title: '更新用户信息', 
+      user:req.session.user,
+      success: req.flash('success').toString(),
+      error: req.flash('error').toString()
+   });
 };

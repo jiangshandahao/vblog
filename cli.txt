@@ -1,0 +1,2 @@
+1. 新建命令行： sudo mongod
+2. 新建命令行： DEBUG=vblog node ./bin/www

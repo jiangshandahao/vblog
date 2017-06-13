@@ -1306,19 +1306,102 @@ overflow: hidden;
 }
 
 
+.user-container {
+    padding: 0;
+    width: 910px!important;
+    margin: 50px auto;
+}
 
+.nav-warp {
+    height: 85px;
+    text-align: center;
+    /*border-bottom: 1px solid #f0f0f0;*/
+}
+.nav-warp a {
+    width: 120px;
+    margin-right: 60px;
+    font-size: 18px;
+    height: 100%;
+    display: block;
+    margin:0 auto;
+    padding-top: 40px;
+    color: #333;
+    border-bottom: 2px solid #3ca5f6;
+}
 
+.acnt-item {
+    position: relative;
+    border-bottom: 1px solid #f0f0f0;
+    width: 100%;
+}
+.acnt-item-icon {
+    margin-top: 49px;
+    margin-right: 15px;
+}
+.icon-round-ok {
+    width: 17px;
+    height: 17px;
+    background-position: -361px -531px;
+}
 
+.icon-round-warning {
+    width: 17px;
+    height: 17px;
+    background-position: -361px -571px;
+}
+.icon-add {
+    width: 20px;
+    height: 20px;
+    background-position: -299px -529px;
+}
+.icon-del {
+    width: 20px;
+    height: 20px;
+    background-position: -300px -593px;
+}
+.acnt-item-label {
+    width: 80px;
+    color: #333;
+    font-weight: 400;
+    font-size: 16px;
+}
+label {
+    display: inline-block;
 
+}
 
+.control-box.account {
+    margin-left: 130px;
+}
 
+.control-box, .control-input, .sex-warp {
+    position: absolute;
+    float: left;
+    margin-left: 110px;
+    bottom: 10px;
+    border: none!important;
+    box-shadow: none!important;
+    font-size: 16px;
+    outline: 0;
+    width: 500px;
+}
 
-
-
-
-
-
-
+.acnt-item .btn-dropdown-show {
+    width: 90px;
+    text-align: center;
+    font-size:14px;
+    position: absolute;
+    bottom: -1px;
+    right: 0;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 6px 12px 9px; 
+    border:1px solid #ccc;
+    cursor: pointer;
+}
+.acnt-item .addicon{
+	position: relative;top:4px;left:6px;
+}
 
 
 

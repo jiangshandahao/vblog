@@ -43,7 +43,7 @@
         </li>
         <li><a href = "#"><i class="icon icon-search"></i>搜索</a></li>
         <% if (user) { %>
-        	<li><a href="/u/<%=user.name%>" target="_blank">你好，<%=user.name%></a></li>
+        	<li><a href="/u/<%=user.username%>" target="_blank">你好，<%=user.username%></a></li>
           <!-- <input type = "hidden" value = "<%=user.name%>" id = "nowUserName"/> -->
           <li><a title="登出" href="/logout">退出登录</a></li>
     	 <% } else{ %>
