@@ -118,3 +118,55 @@ exports.isUserNameNotExist = function(req, res){
 	    }
 	});
 };
+
+
+//登录页面字段验证
+exports.loginValidate = function(req, res, next){
+	var error = [];
+	if(!validateMobile(req.body.mobile) ) {
+		error.push("手机号码格式错误");
+	}
+	
+	if(!validatePassword(req.body.password)) {
+		error.push("密码长度至少为6个字符");
+	}
+	
+	if(error.length){
+		req.flash('error', error.toString());
+		res.redirect('/login');
+	}
+	else{
+		next();
+	}
+};
+
+//注册，向数据库存储新用户
+exports.logIn = function(req, res){
+	
+  UserModel.findOne({ mobile: req.body.mobile })
+  .exec(function(err, user) {
+    if (!user){
+     	req.flash('error', "手机号码不存在");
+		res.redirect('/login');
+    } else if (user.hashed_password === 
+               hashPW(req.body.password.toString())) {
+//    req.session.regenerate(function(){
+//      req.session.user = user.id;
+//      req.session.username = user.username;
+//      req.session.msg = 'Authenticated as ' + user.username;
+//      res.redirect('/');
+//    });
+
+		req.flash('success', '登录成功');
+		res.redirect('/');
+		
+    }else{
+	    	req.flash('error', "手机号码或密码错误");
+	    	res.redirect('/login');
+    }
+    if(err){
+      	req.flash('error', "登录失败");
+	    	res.redirect('/login');
+    }
+  });
+};

@@ -1,0 +1,56 @@
+<%- include header %>
+<div style = "width:100%; height:40px; min-width: 960px; clear:both;"></div>
+
+<form method="post" id = "loginForm">
+<div class="login-warp">
+  <div class="login-container">
+      <div class="login-box">
+          <div class="ordinary-login">
+              <ul class="tab-box">
+                  <a href="/login"><li data-type="login" class="active">登录</li></a>
+                  <a href="/signup"><li data-type="register">注册</li></a>
+              </ul>
+              <div class="login-form-box">
+                  <div class="login">
+                      <!--登录-->
+                      <div class="form-group">
+                      	  <label for="mobile" class = "hide">手机号码</label>
+                          <input id="lgn_username" name="mobile" class="login-input" placeholder="手机号码" />
+                      </div>
+                      <div class="form-group">
+                      	  <label for="password" class = "hide">密码：</label>
+                          <input id="lgn_pwd" type="password" class="login-input" placeholder="密码" name="password"/>
+                      </div>
+                      <div class="form-group">
+                        <div id="embed-captcha"></div>
+                        <p id="wait" class="show">正在加载验证码......</p>
+                        <p id="notice" class="hide">请先拖动验证码到相应位置</p>
+                      </div>
+                      <div class="form-group">
+                          <input type="submit" class="btn-login" id = "embed-submit" value = "登录"/>
+                      </div>
+                      <div class="form-group">
+                       	<a class = "wangji" href="/user/find_passwd" target="_blank">忘记密码？</a>
+                      </div>
+                  </div>
+                  <div class="lgn-three-title">
+                      第三方登录
+                  </div>
+                  <div class="lgn-three-btn-box">
+                      <ul>
+                          <li><a href="#"><i class="icon icon-three icon-three-qq"></i></a></li>
+                          <li><a href="#"><i class="icon icon-three icon-three-wb"></i></a></li>
+                          <li><a href="#"><i class="icon icon-three icon-three-wx"></i></a></li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+
+      </div>
+  </div>
+</div>
+</form>
+
+<%- include footer %>
+<script src="/javascripts/login.js"></script>
+
