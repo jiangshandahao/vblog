@@ -32,21 +32,22 @@
         <li><a href = "#" target="_blank">寻找组织</a></li>
       </ul>
       <ul class = "nav-right">
+      	<li><a href = "#"><i class="icon icon-search"></i>搜索</a></li>
         <li class = "gongzhonghao">
           <a href = "#"><i class="icon icon-sm-phone"></i>公众号</a>
           <div class="app-guide-box" >
-                  <img src="/images/qrcode@100.gif">              
-              <div class="app-guide-title">
+          	 <div class="app-guide-title">
                   <span>微信扫一扫</span>
               </div>
+              <img src="/images/qrcode_for_gh_420b8d2e4eeb_430.jpg">              
+             
            </div>
         </li>
-        <li><a href = "#"><i class="icon icon-search"></i>搜索</a></li>
+       
         <% if (user) { %>
         	<li><a href="/u/<%=user.username%>" target="_blank">你好，<%=user.username%></a></li>
-          <!-- <input type = "hidden" value = "<%=user.name%>" id = "nowUserName"/> -->
-          <li><a title="登出" href="/logout">退出登录</a></li>
-    	 <% } else{ %>
+        <!--<li><a title="登出" href="/logout">退出登录</a></li>--> 
+   	 <% } else{ %>
 	        <li><a href = "/login">登录</a></li>
 	        <li><a href = "/signup">注册</a></li>
         <% } %>	

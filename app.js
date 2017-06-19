@@ -6,7 +6,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var settings = require('./settings');
-
 var routes = require('./routes/index');
 
 var mongoose = require('mongoose') ;
@@ -24,13 +23,13 @@ app.engine('.html',require('ejs').__express);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 
-
-
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+
 app.use(cookieParser());
 /*设置store参数为MongoStore实例，将会话信息存储到数据库中*/
 app.use(expressSession({
@@ -47,6 +46,7 @@ app.use(expressSession({
 }));
 app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 //app.use('/', index);
 //app.use('/users', users);

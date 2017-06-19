@@ -1,0 +1,18 @@
+<div class="box-moder" style="background:white;">
+	<h3><b>最近草稿</b></h3>
+	<span id="xinjiancaogao"><a ng-click = "newDraft()" > <i class="icon icon-edit"></i>&nbsp;新建草稿</a> </span>
+	<span class="span-mark" style="margin-top:12px;"></span>
+	<ul id="notes">
+		<li ng-repeat = "draft in drafts" ng-click = "selectDraft($index)" class="one-note {{draft.active}}">
+			<p class="title">{{draft.atitle}}</p>
+			<p class="abbreviate">{{draft.abrief}}
+			</p>
+			<p class="wordage">关键词: {{draft.keywords.toString()}}</p>
+			<p class="recentEdit">最新修改时间：{{draft.modified_date}} </p>
+		</li>
+		
+	</ul>
+	<div class="get-mod-more transition">
+		进入草稿箱
+	</div>
+</div>

@@ -1,6 +1,8 @@
+var path = require('path');
 var users = require("./users");
+var articles = require("./articles");
 var Geetest = require('../lib/gt-sdk');
-
+var ueditor = require("../lib/ueditor");
 module.exports = function(app){
 
 /*
@@ -74,7 +76,42 @@ app.post("/pc-geetest/form-validate", function(req, res) {
 	});
 });
 
+
+// 支持七牛上传，如有需要请配置好qn参数，如果没有qn参数则存储在本地
+app.use("/ueditor/ue", ueditor(path.join(__dirname, 'public'), {
+    qn: {
+    		accessKey: 'P-TttbGVOwlhnfNzDe4IHavjVk21lDGwnkWM8mE6',
+    		secretKey: 'qAo9JTyYXHaI5g2PT88KEbcPpRYWg44CGDSerazR',
+    		bucket: 'vcaomao-users',
+    		origin: 'http://users.vcaomao.com'
+    }
+}, function(req, res, next) {
+  // ueditor 客户发起上传图片请求
+  var imgDir = '/img/ueditor/'
+  if(req.query.action === 'uploadimage'){
+    var foo = req.ueditor;
+
+    var imgname = req.ueditor.filename;
+
+    
+    res.ue_up(imgDir); //你只要输入要保存的地址 。保存操作交给ueditor来做
+  }
+  //  客户端发起图片列表请求
+  else if (req.query.action === 'listimage'){
+    
+    res.ue_list(imgDir);  // 客户端会列出 dir_url 目录下的所有图片
+  }
+  // 客户端发起其它请求
+  else {
+
+    res.setHeader('Content-Type', 'application/json');
+    res.redirect('/plugins/ueditor/ueditor.config.json');
+}}));
+
+
 users(app);
+articles(app);
+
 
 
 };

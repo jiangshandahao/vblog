@@ -95,7 +95,7 @@ input {outline:none;}
 }
 
 #nav{width:100%; height:60px; border-bottom:1px solid #f0f0f0;line-height: 60px; min-width: 1170px; position: fixed;
-    z-index: 500; background: white;}
+    z-index: 200; background: white;}
 #nav2{width:100%; height:80px; min-width: 1170px; }
 .nav-center{width:1170px; margin:0 auto;height:60px;}
 
@@ -148,9 +148,11 @@ input {outline:none;}
 .app-guide-box img {
     width: 108px;
     height: 108px;
-    float: left;
+    float: right;
 }
 .app-guide-box .app-guide-title {
+	float: left;
+    margin-left: 20px;
     line-height: 100px;
     text-align: center;
 }
@@ -1176,7 +1178,7 @@ overflow: hidden;
 
 /************************发表页面*******************************/
 #articleForm{
-    visibility: hidden;
+    /*visibility: hidden;*/
     width:90%;
     margin:0 auto;
 }
@@ -1202,6 +1204,7 @@ overflow: hidden;
 
 .tg-btn-group {
     margin: 40px 0;
+    overflow: hidden;
 }
 
 .tg-tabs-group{
@@ -1234,6 +1237,7 @@ overflow: hidden;
     height: 48px;
     margin-right: 10px;
     cursor: pointer;
+    float:right;
 }
 
 .btn-caogao {
@@ -1243,6 +1247,8 @@ overflow: hidden;
     height: 48px;
     cursor: pointer;
     background: #aaa;
+    float:right;
+    margin-right: 10px;
 }
 #xinjiancaogao{
     cursor: pointer;
@@ -1297,6 +1303,7 @@ overflow: hidden;
 
 
 .loading{
+	visibility: hidden;
     padding:300px 100px; 
     position: absolute;
     top:40%;
@@ -1403,6 +1410,16 @@ label {
 	position: relative;top:4px;left:6px;
 }
 
-
-
+.article-tip{
+	display: inline-block;
+	width: 80px;
+	font-size: 14px;
+}
+.abrief{
+	border: 1px solid #ccc;
+	vertical-align: middle;
+	padding:10px;
+	width: 630px; 
+	height: 100px; 
+}
 

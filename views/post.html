@@ -1,0 +1,49 @@
+<%- include header %>
+
+<div id = "nav2" style="background:#f5f5f5;"></div>
+
+<div  style="background:#f5f5f5; overflow:hidden;min-width:1170px;">
+
+<div class = "container" ng-app="postModule" ng-controller = "EditController"  >
+<div class = "pull-left" style="background:white; margin-bottom: 20px; position: relative; ">
+		
+	<form method="post" id = "articleForm" >
+	  <input type="text" name="title" id = "post-title" placeholder = "请输入标题,1-30个字" value="" ng-model = "nowarticle.atitle" />
+	  <script id="editor" type="text/plain" style="width:715px;height:600px;"></script>
+	  <div class="tg-tabs-group">
+	  	   <span class = "article-tip">文章简介： </span> 
+		   <textarea name = "abrief" id = "abrief"  class = "abrief" ng-model = "nowarticle.abrief" ></textarea>
+	  </div>
+	  <div class="tg-tabs-group">
+	  	  <span class = "article-tip">文章分类：</span> 
+		  <!--<channels ></channels>-->
+		  <select nowarticle-attr = "nowarticle" ng-model="nowarticle.mychannel" ng-options="channel.name as channel.name group by channel.group for channel in Channels"></select>
+	  </div>
+	  <div class="tg-tabs-group">
+	    	  <span class = "article-tip">关键字： </span> 
+	  	 <input type="text"  class = "tag" ng-model = "nowarticle.keywords[0]"/>
+	  	 <input type="text"  class = "tag" ng-model = "nowarticle.keywords[1]"/>
+	  	 <input type="text"  class = "tag" ng-model = "nowarticle.keywords[2]"/>
+	  	 <input type="text"  class = "tag" ng-model = "nowarticle.keywords[3]"/>
+	  	  
+	  </div>
+	  <div class="tg-btn-group">
+	  	  <input type="button" value="保存草稿" class="btn-caogao" id="btn-caogao" />
+		  <input type="submit" value="发表" class ="btn-publish"/>
+	  </div>
+	</form>
+</div>
+
+<div class="pull-right" >
+	<drafts drafts-attr = "drafts" nowarticle-attr = "nowarticle"></drafts>
+</div>
+</div>
+</div>
+ 
+<script type="text/javascript" charset="utf-8" src="/plugins/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/plugins/ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="/plugins/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script src="/javascripts/angular.min.js"></script> 
+
+<script src = "/javascripts/post.js"></script>
+<%- include footer %>
