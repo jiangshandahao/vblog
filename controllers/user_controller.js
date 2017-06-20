@@ -72,6 +72,7 @@ exports.signUp = function(req, res){
   var userModel = new UserModel({
   	'username':req.body.username,
   	'mobile':req.body.mobile,
+  	'avatar':'images/default@256.jpg',
   	'hashed_password': hashPW(req.body.password)
   });  
   
@@ -153,6 +154,7 @@ exports.logIn = function(req, res){
     } else if (user.hashed_password === 
                hashPW(req.body.password.toString())) {
 	     req.session.regenerate(function(){
+	     	user.hashed_password = "";
 	        req.session.user = user;
 	        req.flash('success', '登录成功');
 			res.redirect('/');

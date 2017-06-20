@@ -12,10 +12,10 @@ app.get('/post',function(req,res){
 	});
 });
 app.post('/post',checkLogin);
-app.post('/post',function(req,res){});
+app.post('/post',ArticleController.saveArticle);
 
-
-
+app.get('/getarticles',checkLogin);
+app.get('/getarticles',ArticleController.getUserArticle);
 
 function checkLogin(req, res, next) {
 	if(!req.session.user) {

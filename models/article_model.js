@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var articleSchema = new Schema({
-  author: {
+  author_id: Schema.Types.ObjectId,
+  author_info: {
   	  username: String,
 	  mobile: String,
 	  email: String,
@@ -15,11 +16,11 @@ var articleSchema = new Schema({
   abrief: String,
   content:String,
   main_picture:String,
-  keywords:String,
+  keywords:[String],
   channels:[String],
-  comments:[OBjectId],
-  agood:[OBjectId],
-  amark:[OBjectId],
+  comments:[Schema.Types.ObjectId],
+  agood:[Schema.Types.ObjectId],
+  amark:[Schema.Types.ObjectId],
   status:Number
 }, {collection: 'article'});
 

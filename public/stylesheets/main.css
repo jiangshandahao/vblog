@@ -28,7 +28,8 @@ input {outline:none;}
     margin: 0 auto;
     z-index: 99999;
     font-size: 18px;
-    width: 100%;
+ 	left:35%;
+    right:35%;
     text-align: center;
 	    
 }
@@ -48,9 +49,10 @@ input {outline:none;}
     margin: 0 auto;
     z-index: 99999;
     font-size: 18px;
-    width: 100%;
     text-align: center;
     display: none;
+    left:35%;
+    right:35%;
         
 }
 .message-error span {
@@ -68,9 +70,10 @@ input {outline:none;}
     margin: 0 auto;
     z-index: 99999;
     font-size: 18px;
-    width: 100%;
     text-align: center;
     display: none;
+    left:35%;
+    right:35%;
         
 }
 .message-info span {
@@ -93,6 +96,9 @@ input {outline:none;}
     -o-transition: all .2s ease-out;
     transition: all .2s ease-out;
 }
+
+/*UEditor 特殊样式*/
+#edui1_message_holder{display: none;}
 
 #nav{width:100%; height:60px; border-bottom:1px solid #f0f0f0;line-height: 60px; min-width: 1170px; position: fixed;
     z-index: 200; background: white;}

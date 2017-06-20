@@ -7,29 +7,29 @@
 <div class = "container" ng-app="postModule" ng-controller = "EditController"  >
 <div class = "pull-left" style="background:white; margin-bottom: 20px; position: relative; ">
 		
-	<form method="post" id = "articleForm" >
+	<form method="post" id = "articleForm" action = "/post">
 	  <input type="text" name="title" id = "post-title" placeholder = "请输入标题,1-30个字" value="" ng-model = "nowarticle.atitle" />
 	  <script id="editor" type="text/plain" style="width:715px;height:600px;"></script>
 	  <div class="tg-tabs-group">
-	  	   <span class = "article-tip">文章简介： </span> 
+	  	   <span class = "article-tip">文章摘要： </span> 
 		   <textarea name = "abrief" id = "abrief"  class = "abrief" ng-model = "nowarticle.abrief" ></textarea>
 	  </div>
 	  <div class="tg-tabs-group">
 	  	  <span class = "article-tip">文章分类：</span> 
-		  <!--<channels ></channels>-->
-		  <select nowarticle-attr = "nowarticle" ng-model="nowarticle.mychannel" ng-options="channel.name as channel.name group by channel.group for channel in Channels"></select>
+		  <select nowarticle-attr = "nowarticle" ng-model="nowarticle.mychannel" ng-options="channel.name as channel.name group by channel.group for channel in Channels" name = "channel"></select>
 	  </div>
 	  <div class="tg-tabs-group">
 	    	  <span class = "article-tip">关键字： </span> 
-	  	 <input type="text"  class = "tag" ng-model = "nowarticle.keywords[0]"/>
-	  	 <input type="text"  class = "tag" ng-model = "nowarticle.keywords[1]"/>
-	  	 <input type="text"  class = "tag" ng-model = "nowarticle.keywords[2]"/>
-	  	 <input type="text"  class = "tag" ng-model = "nowarticle.keywords[3]"/>
+	  	 <input type="text"  name = "tag1" class = "tag" ng-model = "nowarticle.keywords[0]"/>
+	  	 <input type="text"  name = "tag2"  class = "tag" ng-model = "nowarticle.keywords[1]"/>
+	  	 <input type="text"  name = "tag3"  class = "tag" ng-model = "nowarticle.keywords[2]"/>
+	  	 <input type="text"  name = "tag4"  class = "tag" ng-model = "nowarticle.keywords[3]"/>
 	  	  
 	  </div>
 	  <div class="tg-btn-group">
-	  	  <input type="button" value="保存草稿" class="btn-caogao" id="btn-caogao" />
 		  <input type="submit" value="发表" class ="btn-publish"/>
+		  <input type="button" value="保存草稿" class="btn-caogao" id="btn-caogao" />
+		  <button ng-click = "getInfo()">点击</button>
 	  </div>
 	</form>
 </div>

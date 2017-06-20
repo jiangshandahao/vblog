@@ -46,7 +46,7 @@
        
         <% if (user) { %>
         	<li><a href="/u/<%=user.username%>" target="_blank">你好，<%=user.username%></a></li>
-        <!--<li><a title="登出" href="/logout">退出登录</a></li>--> 
+        <li><a title="登出" href="/logout">退出登录</a></li> 
    	 <% } else{ %>
 	        <li><a href = "/login">登录</a></li>
 	        <li><a href = "/signup">注册</a></li>

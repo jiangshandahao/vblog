@@ -8,13 +8,29 @@ $().ready(function() {
          required: true,
          minlength: 1,
          maxlength : 30 
+      },
+      abrief:{
+      	required: true,
+        minlength: 1,
+        maxlength : 80 
+      },
+      channel:{
+      	required: true
       }
     },
     messages: {
       title: {
         required : "请输入文章标题",
         minlength : "文章标题不能小于1个字符",
-        maxlength : "文章标题不能大于30个字符"      
+        maxlength : "文章标题不能多于30个字符"      
+      },
+      abrief: {
+        required : "请输入文章摘要",
+        minlength : "文章摘要不能小于1个字符",
+        maxlength : "文章摘要不能多于80个字符"      
+      },
+      channel: {
+        required : "请输入文章摘要"    
       }
     }
   });
@@ -22,7 +38,18 @@ $().ready(function() {
 
 var app = angular.module("postModule",[]);
 
-app.controller("EditController",function($scope){
+app.controller("EditController",function($scope, $http){
+	
+	$scope.getInfo = function() {
+		var res = $http.get("http://localhost:3000/getarticles");
+		res.success(function(data, status, headers, config) {
+			$scope.drafts = data;
+			console.log(angular.toJson(data, true));
+		}).error(function(data, status, headers, config) {
+//			alert("error,status=>" + status);
+			console.log("error");
+		});
+	};
 	$scope.drafts = [{
 		atitle: 'aaaaa',
 		abrief: 'AAA 简介',
@@ -71,8 +98,7 @@ app.controller("EditController",function($scope){
 	ue.addListener('ready',function(e){
 		ue.setContent($scope.drafts[0].content) ;
 	});//加选择改变事件监听
-	
-	
+
 });
 
 
@@ -87,7 +113,6 @@ app.directive("drafts", function() {
 		},
 		//scope: true,//父元素继承也无法实现双向绑定
 		link: function(scope, elem, attrs) {
-			
 			scope.selectItem =  function(index){
 				console.log(scope.nowarticle);
 				angular.forEach(scope.drafts, function(v) {
@@ -111,9 +136,8 @@ app.directive("drafts", function() {
 				
 				var newArticle = {
 					atitle:'无文章标题',
-					abrief:'无简介内容',
+					abrief:'无文章摘要',
 					content:'ggggg',
-					abrief:'',
 					keywords: ['','','',''],
 					mychannel: '',
 					modified_date: new Date()
