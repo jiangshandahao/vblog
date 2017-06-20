@@ -8,6 +8,7 @@ a{text-decoration: none; color: #333; background-color: transparent;}
 a:hover {color: #4E2824;}
 label{padding:10px 0px;}
 input {outline:none;}
+blockquote{border-left: 2px solid #ccc !important;}
 .btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus {
     outline: dotted thin;
     outline: -webkit-focus-ring-color auto 5px;
@@ -1226,7 +1227,7 @@ overflow: hidden;
 }
 
 .tg-tabs-group .tag{
-    width: 150px;
+    width: 140px;
     font-size:14px;
     padding: 3px;
     border:1px solid #ccc;
@@ -1241,11 +1242,22 @@ overflow: hidden;
     font-size: 18px;
     width: 148px;
     height: 48px;
+    line-height:48px;
+    color:white; 
+    text-align:center; 
     margin-right: 10px;
     cursor: pointer;
     float:right;
+    transition: all .5s;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
 }
-
+.btn-publish:hover{
+	text-decoration: none;
+	background: #f63756;
+	color:white; 
+}
 .btn-caogao {
     color: #fff;
     font-size: 18px;
@@ -1255,11 +1267,18 @@ overflow: hidden;
     background: #aaa;
     float:right;
     margin-right: 10px;
+    transition: all .5s;
+    -webkit-transition: all .5s;
+    -moz-transition: all .5s;
+    -o-transition: all .5s;
+}
+.btn-caogao:hover{
+	background: #f63756;;
 }
 #xinjiancaogao{
     cursor: pointer;
     position: absolute;
-    margin-top: -30px;
+    margin-top: -35px;
     right: 15px;
     float: right;
 }
@@ -1425,7 +1444,7 @@ label {
 	border: 1px solid #ccc;
 	vertical-align: middle;
 	padding:10px;
-	width: 630px; 
+	width: 610px; 
 	height: 100px; 
 }
 
