@@ -20,16 +20,6 @@ app.post('/post',ArticleController.saveArticle);
 app.get('/getarticles',checkLogin);
 app.get('/getarticles/:type',ArticleController.getUserAritcles);
 
-//个人中心： 我的文章、我的草稿箱、我的待审核文章
-app.get('/getmyarticles',checkLogin);
-app.get('/getmyarticles',function(req, res){
-	res.render('myarticles', {
-		title: '微草帽－用户文章',
-		user: req.session.user,
-		success: req.flash('success').toString(),
-		error: req.flash('error').toString()
-	});
-});
 
 
 function checkLogin(req, res, next) {

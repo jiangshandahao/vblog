@@ -26,24 +26,58 @@ var validatePassword =  function(password){
 	return passwordRegex.test(password);
 };
 
-var getUserByMobile = function(mobile){
-	UserModel.findOne({'mobile':mobile})
-	  .exec(function(err,user){
-	  	console.log(user);
-	  	if(err){
-	  		return false; 
-	  	}
-	    if (!user){
-	      return false; 
-	    }
-	    else{
-	    		return user;
-	    }
-	}) ;
+//获取用户主页
+exports.getHomePageByName = function(req, res){
+	//如果当前用户未登录
+	console.log(req.session.user);
+	console.log(req.params );
+	var reqName = req.params.username;
+	var is_login = (!req.session.user == false);//当前用户是否登录
+	
+	if(req.session.user && req.session.user.username == reqName){
+		console.log("当前用户");
+		res.render('homepage', {
+			title: '微草帽－用户文章',
+			user: req.session.user,
+			req_user:req.session.user,
+			is_now_user: true,
+			is_login: is_login,
+			success: req.flash('success').toString(),
+			error: req.flash('error').toString()
+		});
+	}else{
+		console.log("非当前用户");
+		UserModel.findOne({'username':reqName})
+	  	.exec(function(err, page_user) {
+		  	if(err){
+		  		req.flash('error', '获取用户页面失败');
+				res.redirect('/');
+		  	}
+		    if (!page_user){
+		    		req.flash('error', '获取用户页面失败');
+		    		res.redirect('/');
+		    }
+		    else{
+			    	res.render('homepage', {
+			    		title: '微草帽－用户文章',
+			    		user:req.session.user,
+			    		req_user: page_user,
+			    		is_now_user: false,
+			    		is_login: is_login,
+			    		success: req.flash('success').toString(),
+			    		error: req.flash('error').toString()
+			    	});
+		    }
+		});
+	}
 	//UserModel.findOne()返回的是Mongoose中的Document对象
 	//而UserModel.exec()返回的是一个Promise对象
 	//当前getUserByMobile返回的是一个undefined, 因为node异步操作，findOne还没执行完， getUserByMobile 这个函数已经返回。
 };
+
+
+	
+
 	
 //注册页面字段验证
 exports.signUpValidate = function(req, res, next){
@@ -72,7 +106,7 @@ exports.signUp = function(req, res){
   var userModel = new UserModel({
   	'username':req.body.username,
   	'mobile':req.body.mobile,
-  	'avatar':'images/default@256.jpg',
+  	'avatar':'http://resources.vcaomao.com/images/default@256.jpg',
   	'hashed_password': hashPW(req.body.password)
   });  
   

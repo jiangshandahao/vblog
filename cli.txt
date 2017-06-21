@@ -1,2 +1,3 @@
-1. 新建命令行： sudo mongod
+1. 启动数据库： sudo mongod
+	1.1 : sudo mongod -dbpath=/data/db --port=27017
 2. 新建命令行： DEBUG=vblog node ./bin/www
