@@ -1,0 +1,33 @@
+<h2>{{page_title}}</h2>
+
+<div style = "padding: 16px; text-align: center;"><img src = "../images/loading.gif" ng-if = "!completed"/></div>
+
+<div ng-if = "completed" >
+<p class = "zanwu" ng-if = "!myarticles.length">暂无文章</p>
+<div class="mod-b" ng-repeat = "myarticle in myarticles track by $index">
+	<!--栏目链接-->
+	<a href="#" class="column-link" target="_blank">{{myarticle.mychannel}}</a>
+	<div class="mod-thumb">
+		<a class="transition" href="" target="_blank">
+			<img style="display: inline;" src="{{myarticle.main_picture}}" alt="{{myarticle.atitle}}">
+		</a>
+	</div>
+	<div class="mob-ctt">
+		<h3><a href="#" target="_blank">{{myarticle.atitle}}</a></h3>
+
+		<div class="mob-author">
+			<div class="author-face">
+				<a href="#" target="_blank"><img src="{{myarticle.author_info.avatar}}"></a>
+			</div>
+			<a href="#" target="_blank">
+				<span class="author-name">{{myarticle.author_info.username}}</span>
+			</a>
+			<span class="time">{{myarticle.author_info.username}}</span>
+			<i class="icon icon-cmt"></i><em>{{myarticle.comments.length}}</em>
+			<i class="icon icon-fvr"></i><em>{{myarticle.amark.length}}</em>
+			<i class="icon icon-dianzan"></i><em>{{myarticle.agood.length}}</em>
+		</div>
+		<div class="mob-sub">{{myarticle.abrief}}</div>
+	</div>
+</div>  
+</div>

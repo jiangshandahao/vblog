@@ -17,8 +17,7 @@ app.post('/post',checkLogin);
 app.post('/post',ArticleController.saveArticle);
 
 //一个获取文章列表的接口API，可以用于angular中的HTTP请求
-app.get('/getarticles',checkLogin);
-app.get('/getarticles/:type',ArticleController.getUserAritcles);
+app.get('/getarticles',ArticleController.getUserAritcles);
 
 
 

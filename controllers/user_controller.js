@@ -29,13 +29,10 @@ var validatePassword =  function(password){
 //获取用户主页
 exports.getHomePageByName = function(req, res){
 	//如果当前用户未登录
-	console.log(req.session.user);
-	console.log(req.params );
 	var reqName = req.params.username;
 	var is_login = (!req.session.user == false);//当前用户是否登录
 	
 	if(req.session.user && req.session.user.username == reqName){
-		console.log("当前用户");
 		res.render('homepage', {
 			title: '微草帽－用户文章',
 			user: req.session.user,
@@ -46,7 +43,6 @@ exports.getHomePageByName = function(req, res){
 			error: req.flash('error').toString()
 		});
 	}else{
-		console.log("非当前用户");
 		UserModel.findOne({'username':reqName})
 	  	.exec(function(err, page_user) {
 		  	if(err){
@@ -75,10 +71,6 @@ exports.getHomePageByName = function(req, res){
 	//当前getUserByMobile返回的是一个undefined, 因为node异步操作，findOne还没执行完， getUserByMobile 这个函数已经返回。
 };
 
-
-	
-
-	
 //注册页面字段验证
 exports.signUpValidate = function(req, res, next){
 	var error = [];
@@ -156,7 +148,6 @@ exports.isUserNameNotExist = function(req, res){
 	});
 };
 
-
 //登录页面字段验证
 exports.loginValidate = function(req, res, next){
 	var error = [];
@@ -205,7 +196,6 @@ exports.logIn = function(req, res){
 };
 
 //修改用户信息
-
 exports.updateUserInfo = function(req, res){
  	res.render('user_info', { 
       title: '更新用户信息', 

@@ -5,7 +5,6 @@ var mongoose = require('mongoose'),
 
 //新建或更新保存草稿
 exports.saveArticle = function(req, res){
-	console.log(req.body);
 	//把关键字组合成数组
 	var keywords = new Array();
 	keywords[0] = req.body.tag1;
@@ -27,7 +26,7 @@ exports.saveArticle = function(req, res){
 				username: req.session.user.username,
 				mobile: req.session.user.mobile,
 				email: req.session.user.email,
-				avatar: 'images/default@256.jpg',
+				avatar: 'http://resources.vcaomao.com/images/default@256.jpg',
 				signature: req.session.user.signature,
 				badge: req.session.user.badge
 			},
@@ -36,7 +35,7 @@ exports.saveArticle = function(req, res){
 			modified_date: new Date(),
 			abrief: req.body.abrief,
 			content: content,
-			main_picture: "",
+			main_picture: "http://resources.vcaomao.com/images/200920899717.jpg",
 			keywords: keywords,
 			mychannel: mychannel,
 			comments: [],
@@ -59,11 +58,11 @@ exports.saveArticle = function(req, res){
 		//当文章已经存在时， 更新
 		var updateArticleInfo = {
 			atitle: req.body.title,
+			adate: new Date(),
 			modified_date: new Date(),
 			abrief: req.body.abrief,
 			content: content,
-			main_picture: "",
-			keywords: keywords,
+			main_picture: "http://resources.vcaomao.com/images/200920899717.jpg",						keywords: keywords,
 			mychannel: mychannel,
 			status: status 
 		};
@@ -103,19 +102,27 @@ exports.saveArticle = function(req, res){
 
 //API 接口， 获取草稿箱列表
 exports.getUserAritcles = function(req, res){
+	
 	var status = -1; 
-	switch (req.params.type){
+
+	switch (req.query.type){
 		case "drafts":
 			status = 1;
 			break; 
 		case "articles":
+			status = 3; 
+			break; 
+		case "checking":
 			status = 2; 
 			break; 
 		default:
 			break;
 	}
+	
+	var uid = !req.query.requid == false ? req.query.requid : req.session.user._id;
+	//console.log(uid);
 	ArticleModel.find({ 
-		author_id: new ObjectID(req.session.user._id),
+		author_id: new ObjectID(uid),
 		status: status
 	})
 	.limit(8)
@@ -123,7 +130,7 @@ exports.getUserAritcles = function(req, res){
 	.exec(function(err, articles) {
 		if(err){
 			req.flash('error', "获取文章草稿箱失败");
-			res.json({});
+			res.json([]);
 		}else {
 			res.json(articles);
 		}

@@ -44,7 +44,7 @@ var app = angular.module("postModule",[]);
 
 app.controller("EditController",function($scope, $http){
 	
-	var res = $http.get("http://localhost:3000/getarticles/drafts");
+	var res = $http.get("http://localhost:3000/getarticles?type=drafts");
 	res.success(function(data, status, headers, config) {
 		$scope.drafts = data;
 		$scope.completed = true;

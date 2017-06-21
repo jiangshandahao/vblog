@@ -1,37 +1,9 @@
 <%- include header %>
 <div id = "nav2"></div>
-<div class = "container">
+<div class = "container" ng-app = "homePageModule" ng-init = "requid = '<%=req_user._id%>' ; completed = false">
 
-<div class = "pull-left">
- 
-<p class = "zanwu">暂无文章</p>
-
-<div class="mod-b">
-	<!--栏目链接-->
-	<a href="#" class="column-link" target="_blank">24小时</a>
-	<div class="mod-thumb">
-		<a class="transition" href="" target="_blank">
-			<img style="display: inline;" src="" class="lazy" alt="post.title">
-		</a>
-	</div>
-	<div class="mob-ctt">
-		<h3><a href="#" target="_blank">post.title</a></h3>
-
-		<div class="mob-author">
-			<div class="author-face">
-				<a href="#" target="_blank"><img src=""></a>
-			</div>
-			<a href="#" target="_blank">
-				<span class="author-name">post.name</span>
-			</a>
-			<span class="time">post.time.minute</span>
-			<i class="icon icon-cmt"></i><em>post.comments.length</em>
-			<i class="icon icon-fvr"></i><em>post.shoucang</em>
-			<i class="icon icon-dianzan"></i><em>post.dianzan</em>
-		</div>
-		<div class="mob-sub">post.info</div>
-	</div>
-</div>  
+<div class = "pull-left" id = "homepage">
+ 	<div ui-view ></div>
 </div>
 
 
@@ -44,15 +16,16 @@
         </div>
         <div class="author-name">
             <a href="#"><%=req_user.username%></a>
+     
         </div>
        
         <ul class="author-article-pl">
 			<% if (is_now_user) { %>
 				<li><a href="">我的收藏</a></li>
 				<li><a href="">我的关注</a></li>
-				<li><a href="/u/<%=user.username%>">我的文章</a></li>
-				<li><a href="">草稿箱</a></li>
-				<li><a href="">待审核文章</a></li>
+				<li><a ui-sref = "myarticle">我的文章</a></li>
+				<li><a ui-sref ="mydrafts">草稿箱</a></li>
+				<li><a ui-sref ="mychecking">待审核文章</a></li>
 				<li><a href="">未通过文章</a></li>
 				<li><a href="">回收站</a></li>
 			<% }else{ %>
@@ -64,4 +37,8 @@
   </div>
 </div>
 </div>
+
+<script src="/javascripts/angular.min.js"></script> 
+<script src="/javascripts/angular-ui-router.min.js"></script> 
+<script src = "/javascripts/homepage.js"></script>
 <%- include footer%>
