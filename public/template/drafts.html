@@ -10,7 +10,7 @@
 			<p class="abbreviate">{{draft.abrief}}
 			</p>
 			<p class="wordage">关键词: {{draft.keywords.toString()}}</p>
-			<p class="recentEdit">最新修改时间：{{draft.modified_date}} </p>
+			<p class="recentEdit">最新修改时间：{{draft.modified_date  | toTimeDiff}} </p>
 		</li>
 		
 	</ul>

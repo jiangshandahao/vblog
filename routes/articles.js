@@ -19,7 +19,12 @@ app.post('/post',ArticleController.saveArticle);
 //一个获取文章列表的接口API，可以用于angular中的HTTP请求
 app.get('/getarticles',ArticleController.getUserAritcles);
 
+//查看文章
+app.get('/article/:articleid', ArticleController.getArticleById);
 
+//提交评论
+app.post('/newcomment',checkLogin);
+app.post('/newcomment',ArticleController.newComment);
 
 function checkLogin(req, res, next) {
 	if(!req.session.user) {
@@ -36,11 +41,6 @@ function checkNotLogin(req, res, next) {
 	}
 	next();
 };
-
-
-
-
-
 
 
 

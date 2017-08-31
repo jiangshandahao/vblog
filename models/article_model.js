@@ -18,9 +18,9 @@ var articleSchema = new Schema({
   main_picture:String,
   keywords:[String],
   mychannel:String,
-  comments:[Schema.Types.ObjectId],
-  agood:[Schema.Types.ObjectId],
-  amark:[Schema.Types.ObjectId],
+  comments:[],
+  agood:Array,
+  amark:Array,
   status:Number
 }, {collection: 'article'});
 

@@ -1,5 +1,5 @@
-
-	[{
+var articles = [
+	{
 		atitle: 'aaaaa',
 		abrief: 'AAA 简介',
 		content: '1111sdfsfdsdfs',
@@ -32,4 +32,4 @@
 		keywords: ['前端', 'HTML335', 'Web', ''],
 		modified_date: '2017-8-8'
 	}
-	]
+];

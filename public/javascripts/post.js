@@ -74,7 +74,6 @@ app.controller("EditController",function($scope, $http){
 			ue.setContent($scope.drafts[0].content);
 		}); //加选择改变事件监听
 		
-//		console.log(angular.toJson(data, true));
 	}).error(function(data, status, headers, config) {
 		console.log("获取文章列表失败");
 	});	
@@ -84,7 +83,6 @@ app.controller("EditController",function($scope, $http){
 	$scope.Channels = [{ id: 1, name: '互联网资讯', group: '文章分类' }, { id: 2, name: '干货分享', group: '文章分类' }, { id: 3, name: '码农进阶',group:'文章分类' }];
 	
 	
-
 });
 
 

@@ -1,0 +1,211 @@
+<%- include header %>
+
+<div id = "nav2"></div>
+
+<div class = "container" ng-app="articleModule">
+
+<div class="pull-left">
+  <!--文章内容页-->
+  <div class="article-left-btn-group">
+      <ul>
+          <li><a href=""><i class="icon icon-article icon-article-wb"></i></a></li>
+          <li><a><i class="icon icon-article icon-article-pyq"></i></a></li>
+          <li><a href=""><i class="icon icon-article icon-article-qzone"></i></a></li>
+          <li><a href = "#pinglunsection"><i class="icon icon-article icon-article-pl">评论</i></a></li>
+          <li id="shoucang1" rel="isshoucang"><a><i class="icon icon-article icon-article-col">收藏</i></a></li>
+     </ul>
+  </div>
+  <div class="article-wrap" ng-controller = "articleController">
+     <h1 class="t-h1"><%= article.atitle %></h1>
+     <div class="article-author">
+        <a href="#" class="column-link" target="_blank"><%= article.mychannel %></a>
+        <span class="author-name">
+                <a href="/u/<%= article.author_info.username %>" target="_blank"><%= article.author_info.username %></a>
+        </span>
+        <i class="icon icon-line"></i>
+        <span class="article-time">{{ adate | toTimeDiff }} </span>
+        <span class="article-share">收藏 <%= article.amark.length %></span>
+        <span class="article-pl">评论<%= article.comments.length %></span>
+    </div>
+     <div class="article-manage-bar"></div>             
+     <div id="article_content" class="article-content-wrap">
+       <%- article.content %>
+      <div class="neirong-shouquan">
+        <span class="c2">*文章为作者独立观点，不代表微草帽立场<br></span>
+        <span>本文由 <a href="/u/<%= article.author_info.username %>" target="_blank"><%= article.author_info.username %></a> 授权 <a href="/">微草帽</a> 发表，并经微草帽编辑。转载此文章须经作者同意，并请附上出处(<a href="/">微草帽</a>)及本页链接。本文链接：<a href = "http://www.vcaomao.com/article/<%= article._id %>" target="_blank">http://www.vcaomao.com/article/<%= article._id %></a> <br></span>
+      </div>
+      <div class="neirong-shouquan-public">
+        <span>关注微信公众号微草帽，定时推送，福利互动精彩多</span>
+      </div>
+   
+  	 <div class="tag-box">
+    <ul class="transition">
+      <a class="tag" href="/tags/tag"><li class="transition">tag </li></a>
+    </ul>
+  </div>
+  </div>
+  <!--公共评论-->
+  <div ng-controller = "commentController" >
+  <div class="message-error" ng-cloak ng-if = "errorif"><span>{{error_message}}</span></div>
+  <div class="message-info" ng-cloak ng-if = "successif"><span>{{info}}</span></div>
+  <div class="pl-wrap" id="pl-wrap-article">
+  	  <% if (user) { %>
+    <div class="pl-form-wrap" >
+        <span class="span-mark-author">发表评论</span>
+        <div class="pl-form-author">
+        <div class="author-info">
+            <a href = "/u/<%= article.author_info.username %>" target = "_blank" class="author-face">
+                <img src="<%= article.author_info.avatar %>">
+            </a>
+            <a href = "/u/<%= article.author_info.username %>" target = "_blank"  class="author-name"><%= article.author_info.username %></a>
+        </div>
+        </div>
+        <div class="pl-form-box">    
+            <textarea class="form-control" id="saytext" name="saytext" placeholder="客官，8个字起评，不讲价哟" style="resize: none; overflow-y: hidden;" ng-model = "newContent"></textarea>
+            <div class = "comment_error" ng-if = "errorshow">客官，8个字起评，不讲价哟</div>
+            <button class="btn btn-article" id = "fabiaopinglun" ng-click = "newComment()">发表</button>
+        </div>
+    </div>
+     <% } else{ %>
+    <div class="no-login-box ">
+        <a href="/login" class="moder-lgn-box">登录</a>后参与评论
+    </div>
+    <% } %>	
+  </div>
+<!-- 最新评论 -->
+
+  <div class="pl-list-wrap" > 
+  	<a class="span-mark-author" id = "zuixinpinglun">最新评论</a>
+	<p class="pl-yh-no-content" ng-if = "!commentsData.length">这里空空如也，期待你的发声</p>
+    <div class="pl-box-wrap" ng-repeat="comment in commentsData | orderBy:'-cdate'  track by $index"  >
+	    <div class="pl-box-top">
+	      <div class="author-info">
+	          <div class="author-face">
+	          <img src="{{comment.avatar}}">
+	          </div>
+	          <span class="author-name">
+	              <a href="#">{{comment.username}}</a>
+	          </span>
+	          <span class="time"> {{comment.cdate | toTimeDiff}}  </span>
+	      </div>
+	      <div class="pl-content">{{comment.content}} </div>
+	    </div>
+	</div>
+
+  </div>
+</div>
+
+  <!-- 相关文章 -->
+  <div class="interested-article-box" >
+    <span class="span-mark-author">相关文章</span>
+      <div class="article-list-box">
+        <div class="article-box transition">
+          <a href="#" target="_blank">
+             <img src="/images/143423905645.jpg" />
+          </a>
+          <div class="article-title">
+              <a href="#" target="_blank">学渣拍照秒变学霸，用了在线教育APP，中...</a>
+          </div>
+        </div>
+        <div class="article-box transition">
+            <a href="#" target="_blank">
+            <img src="/images/115048965285.jpg" />
+            </a>
+            <div class="article-title">
+            <a href="#" target="_blank">2015在线教育盘点：看网易、BAT、新...</a>
+            </div>
+        </div>
+        <div class="article-box transition">
+            <a href="#" target="_blank">
+               <img src="/images/081850014334.jpg" />
+            </a>
+            <div class="article-title">
+            <a href="#" target="_blank">今年的在线教育行业都有哪些动作？</a>
+            </div>
+        </div>
+        <div class="article-box transition">
+            <a href="#" target="_blank">
+           <img src="/images/141602574532.jpg" />
+           </a>
+          <div class="article-title">
+            <a href="#" target="_blank">BAT在在线教育撒大网，惜乎“最后一公里...</a>
+          </div>
+        </div>
+        <div class="article-box transition">
+          <a href="#" target="_blank">
+            <img src="/images/154800855674.jpg">
+          </a>
+          <div class="article-title">
+          <a href="#" target="_blank">LinkedIn收购Lynda之后，在线...</a>
+          </div>
+        </div>
+        <div class="article-box transition">
+            <a href="#" target="_blank">
+            <img src="/images/185434295619.jpg">
+            </a>
+            <div class="article-title">
+            <a href="#" target="_blank">一切刚开始没有收入的在线教育将终生...</a>
+            </div>
+        </div>
+      </div>  
+  </div>
+</div>
+</div>
+<div class="wrap-right pull-right">
+     <div class="box-author-info">
+        <div class="author-face">
+            <a href="#">
+                <img src="<%= article.author_info.avatar %>">
+            </a>
+        </div>
+        <div class="author-name">
+            <a href="#"><%= article.author_info.username %></a>
+        </div>
+  	</div>
+
+    <div class="box-moder">
+        <h3><b>热门标签</b></h3>
+        <span class="project-more"><a href="/tags" target="_blank">全部</a></span>
+        <span class="span-mark" style="margin-top:12px;"></span>
+        <ul class="search-hot">
+           
+        </ul>
+    </div>
+
+  <div class="placeholder"></div>
+
+    <div class="box-moder hot-article">
+      <h3><b>热文</b></h3>
+      <span class="span-mark" style="margin-top:12px;"></span>
+      <ul id = "rewen-list">
+      </ul>
+    </div>
+
+    </div>
+
+</div>
+<script src="/lib/angular.min.js"></script> 
+<script type="text/javascript">
+	var comments = JSON.parse('<%- JSON.stringify(article.comments)%>'); 
+	var avatar = "<%= article.author_info.avatar %>";
+	var username = "<%= article.author_info.username %>";
+	var pid = "<%= article._id %>";
+	var adate = "<%= article.adate %>";
+</script>
+<script src = "/javascripts/article.js"></script>
+
+<%- include footer %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

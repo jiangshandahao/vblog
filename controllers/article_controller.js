@@ -62,7 +62,7 @@ exports.saveArticle = function(req, res){
 			modified_date: new Date(),
 			abrief: req.body.abrief,
 			content: content,
-			main_picture: "http://resources.vcaomao.com/images/200920899717.jpg",						keywords: keywords,
+			main_picture: "http://resources.vcaomao.com/images/200920899717.jpg",									keywords: keywords,
 			mychannel: mychannel,
 			status: status 
 		};
@@ -109,12 +109,13 @@ exports.getUserAritcles = function(req, res){
 		case "drafts":
 			status = 1;
 			break; 
-		case "articles":
-			status = 3; 
-			break; 
 		case "checking":
 			status = 2; 
 			break; 
+		case "articles":
+			status = 3; 
+			break; 
+		
 		default:
 			break;
 	}
@@ -129,11 +130,77 @@ exports.getUserAritcles = function(req, res){
 	.sort({modified_date: -1})
 	.exec(function(err, articles) {
 		if(err){
-			req.flash('error', "获取文章草稿箱失败");
+			req.flash('error', "获取文章列表失败");
 			res.json([]);
 		}else {
 			res.json(articles);
 		}
 		
 	});
+};
+
+exports.getArticleById = function(req, res){
+	
+	var aid = req.params.articleid;
+	ArticleModel.findOne({ 
+		_id: new ObjectID(aid)
+	})
+	.exec(function(err, article) {
+		if(err){
+			req.flash('error', "获取文章失败");
+			res.redirect('/');
+		}else {
+			if(article){
+				res.render('article', {
+					title: '微草帽－用户文章',
+					user: req.session.user,
+					article:article,
+					success: req.flash('success').toString(),
+					error: req.flash('error').toString()
+				});
+			}else{
+				req.flash('error', "获取文章失败");
+				res.redirect('/');
+			}
+		}
+		
+	});
+};
+
+exports.newComment = function(req, res){
+
+	ArticleModel.findOne({"_id": new ObjectID(req.body.pid)})
+		.exec(function(err, article) {
+			if(err) {
+				res.send({
+					'error': "添加评论失败"
+				});
+				
+			} else {
+				article.update({
+					"$push":{
+						"comments":{
+							"avatar":req.body.avatar,
+							"username":req.body.username ,
+							"content":req.body.content,
+							"cdate": new Date(),
+							"like":[],
+							"unlike":[]
+						}
+					}
+				})
+				.exec(function(err){
+					if(err){
+						res.send({
+							'error': "添加评论失败"
+						});
+					}else{
+						res.send({
+							'success': "添加评论成功"
+						});
+					}
+				});
+			}
+		});	
+
 };

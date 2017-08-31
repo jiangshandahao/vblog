@@ -13,16 +13,16 @@
 		</a>
 	</div>
 	<div class="mob-ctt">
-		<h3><a href="#" target="_blank">{{myarticle.atitle}}</a></h3>
+		<h3><a href="/article/{{myarticle._id}}" target="_blank">{{myarticle.atitle}}</a></h3>
 
 		<div class="mob-author">
 			<div class="author-face">
-				<a href="#" target="_blank"><img src="{{myarticle.author_info.avatar}}"></a>
+				<a href="/u/{{myarticle.author_info.username}}" target="_blank"><img src="{{myarticle.author_info.avatar}}"></a>
 			</div>
-			<a href="#" target="_blank">
+			<a href="/u/{{myarticle.author_info.username}}" target="_blank">
 				<span class="author-name">{{myarticle.author_info.username}}</span>
 			</a>
-			<span class="time">{{myarticle.author_info.username}}</span>
+			<span class="time">{{myarticle.adate}}</span>
 			<i class="icon icon-cmt"></i><em>{{myarticle.comments.length}}</em>
 			<i class="icon icon-fvr"></i><em>{{myarticle.amark.length}}</em>
 			<i class="icon icon-dianzan"></i><em>{{myarticle.agood.length}}</em>
