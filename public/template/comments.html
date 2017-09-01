@@ -1,0 +1,50 @@
+<div>
+	<div class="message-error" ng-cloak ng-if="errorif"><span>{{error_message}}</span></div>
+	<div class="message-info" ng-cloak ng-if="successif"><span>{{info}}</span></div>
+	<!-- 发表评论 -->
+	<div class="pl-wrap" id="pl-wrap-article">
+	<div class="pl-form-wrap" ng-show = "user" >
+
+		<span class="span-mark-author">发表评论</span>
+		<div class="pl-form-author">
+			<div class="author-info">
+				<a href="/u/{{article.author_info.username}}" target="_blank" class="author-face">
+					<img ng-src="{{article.author_info.avatar}}">
+				</a>
+				<a href="/u/{{article.author_info.username}}" target="_blank" class="author-name">{{article.author_info.username}}</a>
+			</div>
+		</div>
+	
+		<div class="pl-form-box">
+			<textarea class="form-control" id="saytext" name="saytext" placeholder="客官，8个字起评，不讲价哟" style="resize: none; overflow-y: hidden;" ng-model="content"></textarea>
+			<div class="comment_error" ng-if="errorshow">客官，8个字起评，不讲价哟</div>
+			<button class="btn btn-article" id="fabiaopinglun" ng-click="newComment()">发表</button>
+		</div>
+	</div>
+	<div class="no-login-box " ng-show="!user">
+		<a href="/login" class="moder-lgn-box">登录</a>后参与评论
+	</div>
+	</div>
+	
+	<!-- 最新评论 -->
+
+  <div class="pl-list-wrap" > 
+  	<a class="span-mark-author" id = "zuixinpinglun">最新评论</a>
+	<p class="pl-yh-no-content" ng-show = "!commentsData.length">这里空空如也，期待你的发声</p>
+    <div class="pl-box-wrap" ng-repeat="comment in commentsData | orderBy:'-cdate'"  >
+	    <div class="pl-box-top">
+	      <div class="author-info">
+	          <div class="author-face">
+	          <img ng-src="{{comment.avatar}}">
+	          </div>
+	          <span class="author-name">
+	              <a href="#">{{comment.username}}</a>
+	          </span>
+	          <span class="time"> {{comment.cdate | toTimeDiff}}  </span>
+	      </div>
+	      <div class="pl-content">{{comment.content}} </div>
+	      <div class="post-right"><i class="icon icon-like" ng-click = "goodHandler(comment._id)"></i><span>{{comment.like.length}}</span> <i class="icon icon-no-like" ng-click = "badHandler(comment)"></i><span>{{comment.unlike.length}}</span></div>
+	    </div>
+	</div>
+  </div>
+</div>

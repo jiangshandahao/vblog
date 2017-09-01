@@ -38,7 +38,7 @@ exports.saveArticle = function(req, res){
 			main_picture: "http://resources.vcaomao.com/images/200920899717.jpg",
 			keywords: keywords,
 			mychannel: mychannel,
-			comments: [],
+//			comments: [],
 			agood: [],
 			amark: [],
 			status: status 
@@ -167,40 +167,3 @@ exports.getArticleById = function(req, res){
 	});
 };
 
-exports.newComment = function(req, res){
-
-	ArticleModel.findOne({"_id": new ObjectID(req.body.pid)})
-		.exec(function(err, article) {
-			if(err) {
-				res.send({
-					'error': "添加评论失败"
-				});
-				
-			} else {
-				article.update({
-					"$push":{
-						"comments":{
-							"avatar":req.body.avatar,
-							"username":req.body.username ,
-							"content":req.body.content,
-							"cdate": new Date(),
-							"like":[],
-							"unlike":[]
-						}
-					}
-				})
-				.exec(function(err){
-					if(err){
-						res.send({
-							'error': "添加评论失败"
-						});
-					}else{
-						res.send({
-							'success': "添加评论成功"
-						});
-					}
-				});
-			}
-		});	
-
-};

@@ -904,8 +904,9 @@ overflow: hidden;
 }
 
 .pl-box-wrap {
-    padding: 20px 0;
+    padding: 16px 0;
     border-top: 1px solid #f0f0f0;
+    overflow: hidden;
 }
 .pl-box-btm {
     overflow: hidden;
@@ -929,6 +930,15 @@ overflow: hidden;
 .article-type ul li {
     margin-right: 15px;
 }
+
+.post-right{
+	float: right;
+}
+.post-right span{
+	margin-right:3px;
+	color:#bbb;
+}
+
 .icon-like {
     position: relative;
     top:3px;
@@ -937,6 +947,9 @@ overflow: hidden;
 }
 .icon-like.active {
     background-position: -220px -223px;
+}
+.icon-like:hover{
+	background-position: -220px -223px;
 }
 .icon-no-like {
     position: relative;
@@ -947,6 +960,9 @@ overflow: hidden;
 .icon-no-like.active {
     background-position: -270px -221px;
     cursor: pointer;
+}
+.icon-no-like:hover {
+    background-position: -270px -221px;
 }
 .neirong-shouquan, .neirong-shouquan-public {
     font-size: 14px!important;

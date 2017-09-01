@@ -18,7 +18,7 @@ var articleSchema = new Schema({
   main_picture:String,
   keywords:[String],
   mychannel:String,
-  comments:[],
+//comments:[],
   agood:Array,
   amark:Array,
   status:Number

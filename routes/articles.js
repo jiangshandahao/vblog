@@ -1,4 +1,5 @@
 var ArticleController = require('../controllers/article_controller.js');
+var CommentController = require('../controllers/comment_controller.js');
 
 module.exports = function(app){
 
@@ -22,9 +23,15 @@ app.get('/getarticles',ArticleController.getUserAritcles);
 //查看文章
 app.get('/article/:articleid', ArticleController.getArticleById);
 
+//查询评论列表
+app.get('/getcomment',CommentController.getCommentsByPid);
+//点赞评论
+app.post('/goodcomment',CommentController.goodCommentHandler);
+
+
 //提交评论
 app.post('/newcomment',checkLogin);
-app.post('/newcomment',ArticleController.newComment);
+app.post('/newcomment',CommentController.newComment);
 
 function checkLogin(req, res, next) {
 	if(!req.session.user) {

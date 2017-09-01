@@ -9,6 +9,7 @@ var settings = require('./settings');
 var routes = require('./routes/index');
 
 var mongoose = require('mongoose') ;
+mongoose.Promise = global.Promise;  
 var 	connect = mongoose.connect('mongodb://localhost:27017/vblog');
 
 var expressSession = require('express-session');

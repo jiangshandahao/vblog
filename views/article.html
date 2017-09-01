@@ -1,5 +1,13 @@
 <%- include header %>
-
+<script type="text/javascript">
+	var article = JSON.parse('<%- JSON.stringify(article)%>'); 
+	
+	var user = "";
+	if('<%=user%>'){
+		var user = JSON.parse('<%- JSON.stringify(user)%>');
+	}
+	
+</script>
 <div id = "nav2"></div>
 
 <div class = "container" ng-app="articleModule">
@@ -25,7 +33,8 @@
         <i class="icon icon-line"></i>
         <span class="article-time">{{ adate | toTimeDiff }} </span>
         <span class="article-share">收藏 <%= article.amark.length %></span>
-        <span class="article-pl">评论<%= article.comments.length %></span>
+        
+        <span ng-controller = "commentController" class="article-pl">评论{{commentsData.length}}</span>
     </div>
      <div class="article-manage-bar"></div>             
      <div id="article_content" class="article-content-wrap">
@@ -44,57 +53,11 @@
     </ul>
   </div>
   </div>
-  <!--公共评论-->
-  <div ng-controller = "commentController" >
-  <div class="message-error" ng-cloak ng-if = "errorif"><span>{{error_message}}</span></div>
-  <div class="message-info" ng-cloak ng-if = "successif"><span>{{info}}</span></div>
-  <div class="pl-wrap" id="pl-wrap-article">
-  	  <% if (user) { %>
-    <div class="pl-form-wrap" >
-        <span class="span-mark-author">发表评论</span>
-        <div class="pl-form-author">
-        <div class="author-info">
-            <a href = "/u/<%= article.author_info.username %>" target = "_blank" class="author-face">
-                <img src="<%= article.author_info.avatar %>">
-            </a>
-            <a href = "/u/<%= article.author_info.username %>" target = "_blank"  class="author-name"><%= article.author_info.username %></a>
-        </div>
-        </div>
-        <div class="pl-form-box">    
-            <textarea class="form-control" id="saytext" name="saytext" placeholder="客官，8个字起评，不讲价哟" style="resize: none; overflow-y: hidden;" ng-model = "newContent"></textarea>
-            <div class = "comment_error" ng-if = "errorshow">客官，8个字起评，不讲价哟</div>
-            <button class="btn btn-article" id = "fabiaopinglun" ng-click = "newComment()">发表</button>
-        </div>
-    </div>
-     <% } else{ %>
-    <div class="no-login-box ">
-        <a href="/login" class="moder-lgn-box">登录</a>后参与评论
-    </div>
-    <% } %>	
-  </div>
-<!-- 最新评论 -->
-
-  <div class="pl-list-wrap" > 
-  	<a class="span-mark-author" id = "zuixinpinglun">最新评论</a>
-	<p class="pl-yh-no-content" ng-if = "!commentsData.length">这里空空如也，期待你的发声</p>
-    <div class="pl-box-wrap" ng-repeat="comment in commentsData | orderBy:'-cdate'  track by $index"  >
-	    <div class="pl-box-top">
-	      <div class="author-info">
-	          <div class="author-face">
-	          <img src="{{comment.avatar}}">
-	          </div>
-	          <span class="author-name">
-	              <a href="#">{{comment.username}}</a>
-	          </span>
-	          <span class="time"> {{comment.cdate | toTimeDiff}}  </span>
-	      </div>
-	      <div class="pl-content">{{comment.content}} </div>
-	    </div>
-	</div>
-
-  </div>
-</div>
-
+   <% if (article.status == 1) { %>
+   	<div ng-controller = "commentController">
+  		<comments comments-attr = "commentsData"></comments> 
+  	</div>
+   <% } %>
   <!-- 相关文章 -->
   <div class="interested-article-box" >
     <span class="span-mark-author">相关文章</span>
@@ -154,12 +117,12 @@
 <div class="wrap-right pull-right">
      <div class="box-author-info">
         <div class="author-face">
-            <a href="#">
+            <a href="/u/<%= article.author_info.username %>">
                 <img src="<%= article.author_info.avatar %>">
             </a>
         </div>
         <div class="author-name">
-            <a href="#"><%= article.author_info.username %></a>
+            <a href="/u/<%= article.author_info.username %>"><%= article.author_info.username %></a>
         </div>
   	</div>
 
@@ -185,13 +148,7 @@
 
 </div>
 <script src="/lib/angular.min.js"></script> 
-<script type="text/javascript">
-	var comments = JSON.parse('<%- JSON.stringify(article.comments)%>'); 
-	var avatar = "<%= article.author_info.avatar %>";
-	var username = "<%= article.author_info.username %>";
-	var pid = "<%= article._id %>";
-	var adate = "<%= article.adate %>";
-</script>
+
 <script src = "/javascripts/article.js"></script>
 
 <%- include footer %>
