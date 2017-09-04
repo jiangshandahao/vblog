@@ -109,3 +109,76 @@ exports.goodCommentHandler = function(req, res){
 		});
 	}
 };
+
+exports.badCommentHandler = function(req, res){
+	if( !req.body.uid || !req.body.cid) {
+		res.send({
+			'error': "踩评论失败"
+		});
+	}else{
+		CommentModel.findOne({
+			"_id": new ObjectID(req.body.cid)
+		})
+		.exec(function(err, comment) {
+			if(err) {
+				res.send({
+					'error': "踩评论失败"
+				});
+			} else {
+				if(comment.like.indexOf(req.body.uid) === -1){
+					comment.update({
+							$push: {
+								unlike: req.body.uid
+							}
+						})
+						.exec(function(err, updatedComment) {
+							if(err) {
+								res.send({
+									'error': "踩评论失败"
+								});
+							} else {
+								res.send({
+									'success': "踩评论成功"
+								});
+							}
+						});
+				}else{
+					comment.update({
+							$pull: {
+								unlike: req.body.uid
+							}
+						})
+						.exec(function(err, updatedComment) {
+							if(err) {
+								res.send({
+									'error': "取消踩评论失败"
+								});
+							} else {
+								res.send({
+									'success': "取消踩评论成功"
+								});
+							}
+						});
+				}
+			
+			}
+		});
+	}
+};
+
+exports.deleteCommentHandler = function(req, res){
+	CommentModel.remove({
+		"_id": new ObjectID(req.body._id)
+	},function(err){
+		if(err) {
+			res.send({
+				'error': "删除评论失败"
+			});
+		} else {
+			res.send({
+				'success': "删除评论成功"
+			});
+		}
+	});
+
+};

@@ -9,11 +9,7 @@ a:hover {color: #4E2824;text-decoration: none;}
 label{padding:10px 0px;}
 input {outline:none;}
 blockquote{border-left: 2px solid #ccc !important;}
-.btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus {
-    outline: dotted thin;
-    outline: -webkit-focus-ring-color auto 5px;
-    outline-offset: -2px;
-}
+
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -22,7 +18,12 @@ blockquote{border-left: 2px solid #ccc !important;}
     border-radius: 10px;
     background: rgba(0,0,0,.2);
 }
-
+.btn-default.active.focus, .btn-default.active:focus, .btn-default.active:hover, .btn-default:active.focus, .btn-default:active:focus, .btn-default:active:hover, .btn-group.open .dropdown-toggle, .btn-group>.btn+.dropdown-toggle:hover, .open>.dropdown-toggle.btn-default.focus, .open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover {
+    background-color: #3ca5f6!important;
+    border-color: #3ca5f6!important;
+    color: #fff!important;
+    box-shadow: none;
+}
 .message-prompt {
     position: fixed;
     top: 0;
@@ -811,7 +812,7 @@ overflow: hidden;
 }
 .author-info {
     margin: 0 0 15px;
-    display: inline-block;
+    overflow: hidden;
 }
 .author-info .author-face {
     position: relative;
@@ -1490,4 +1491,37 @@ label {
 .comment_error{
 	color:red;
 	margin-top: 10px;
+}
+.pl-box-wrap .dropdown-menu {
+    border: none;
+    box-shadow: 0 0 15px rgba(18,21,21,.2);
+    margin: 10px 0 0 0;
+    text-align: center;
+    width: 120px;
+    min-width: 10px;
+    border-radius: 0;
+    z-index: 1000;
+    right: 0;
+    left: auto;
+    top:24px;
+}
+.pl-box-wrap .dropdown-menu li {
+    color: #bbb;
+    font-size: 16px;
+    margin: 8px 0;
+    cursor: pointer;
+}
+.pl-box-wrap .dropdown-menu li:hover {
+    color: #333;
+}
+.delete-comment{
+	float:right;
+	border-radius: 0;
+	color: #3ca5f6;
+	
+}
+.delete-comment:hover,.delete-comment:focus{
+	color: #fff;
+	background-color: #3ca5f6;
+	border-color: #3ca5f6;
 }

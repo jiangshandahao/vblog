@@ -25,9 +25,12 @@ app.get('/article/:articleid', ArticleController.getArticleById);
 
 //查询评论列表
 app.get('/getcomment',CommentController.getCommentsByPid);
+//删除评论
+app.post('/deletecomment',CommentController.deleteCommentHandler);
 //点赞评论
 app.post('/goodcomment',CommentController.goodCommentHandler);
-
+//倒踩评论
+app.post('/badcomment',CommentController.badCommentHandler);
 
 //提交评论
 app.post('/newcomment',checkLogin);

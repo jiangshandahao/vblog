@@ -8,7 +8,22 @@ app.controller("commentController",function($scope, $http){
 	$scope.commentsData = [];
 	var res = $http.get("http://localhost:3000/getcomment?pid="+ article._id);
 	res.success(function(data, status, headers, config) {
-		$scope.commentsData = data;
+		if(!data.error){
+			data.forEach(function(v, i) {
+				if(v.like.indexOf(user._id) !== -1){
+					v.like_active = true; 
+				}else{
+					v.like_active = false;  
+				}
+				if(v.unlike.indexOf(user._id) !== -1){
+					v.nolike_active = true; 
+				}else{
+					v.nolike_active = false;  
+				}
+			});
+			$scope.commentsData = data;
+		}
+		
 	});
 
 });
@@ -61,8 +76,8 @@ app.controller("commentController",function($scope, $http){
                    		scope.errorshow = false;
                    		var new_comment = {
 							pid: scope.article._id,
-							avatar: scope.article.author_info.avatar,
-							username: scope.article.author_info.username,
+							avatar: scope.user.avatar,
+							username: scope.user.username,
 							content: scope.content
 						};
 						
@@ -85,10 +100,10 @@ app.controller("commentController",function($scope, $http){
                 };
                 
                 
-                	scope.goodHandler = function(comment_id){
+                	scope.goodHandler = function(comment){
                 		if(scope.user._id){
                 			var commentInfo = {
-                				cid: comment_id,
+                				cid: comment._id,
                 				uid: scope.user._id
                 			};
                 			$http({
@@ -97,19 +112,102 @@ app.controller("commentController",function($scope, $http){
                 				data: commentInfo
                 			}).success(function(data, status, headers, config) {
                 				if(data.success) {
-                					scope.showInfo("success", "点赞成功");
+                					var index = scope.commentsData.indexOf(comment);
+                					comment.like_active = !comment.like_active;
+                					
+                					if(comment.like_active){
+                						comment.like.push(commentInfo.uid);
+                						scope.showInfo("success", "点赞成功");
+                					}else{
+                						comment.like.splice(comment.like.indexOf(commentInfo.uid),1);
+                						scope.showInfo("error", "取消点赞成功");
+                					}
+                					scope.commentsData[index] = comment;
+                					
                 				} else {
-                					scope.showInfo("error", "点赞失败");
+                					if(comment.like_active){
+                						scope.showInfo("success", "取消点赞失败");
+                					}else{
+                						scope.showInfo("error", "点赞失败");
+                					}
                 				}
                 			
                 			}).error(function(data, status, headers, config) {
-                				scope.showInfo("error", "点赞失败");
+                				if(comment.like_active) {
+                					scope.showInfo("success", "取消点赞失败");
+                				} else {
+                					scope.showInfo("error", "点赞失败");
+                				}
                 			});
                 			console.log(commentInfo);
                 		}else{
                 			scope.showInfo("error" , "此操作需要登录");
                 		}
 					
+				};
+				
+				scope.badHandler = function(comment){
+                		if(scope.user._id){
+                			var commentInfo = {
+                				cid: comment._id,
+                				uid: scope.user._id
+                			};
+                			$http({
+                				method: "POST",
+                				url: "http://localhost:3000/badcomment",
+                				data: commentInfo
+                			}).success(function(data, status, headers, config) {
+                				if(data.success) {
+                					var index = scope.commentsData.indexOf(comment);
+                					comment.nolike_active = !comment.nolike_active;
+                					
+                					if(comment.nolike_active){
+                						comment.unlike.push(commentInfo.uid);
+                						scope.showInfo("success", "踩评论成功");
+                					}else{
+                						comment.unlike.splice(comment.unlike.indexOf(commentInfo.uid),1);
+                						scope.showInfo("error", "取消踩评论成功");
+                					}
+                					scope.commentsData[index] = comment;
+                					
+                				} else {
+                					if(comment.nolike_active){
+                						scope.showInfo("success", "取消踩评论失败");
+                					}else{
+                						scope.showInfo("error", "踩评论失败");
+                					}
+                				}
+                			
+                			}).error(function(data, status, headers, config) {
+                				if(comment.nolike_active) {
+                					scope.showInfo("success", "取消踩评论失败");
+                				} else {
+                					scope.showInfo("error", "踩评论失败");
+                				}
+                			});
+                			console.log(commentInfo);
+                		}else{
+                			scope.showInfo("error" , "此操作需要登录");
+                		}
+					
+				};
+				
+				scope.deleteComment = function(comment){
+					$http({
+                				method: "POST",
+                				url: "http://localhost:3000/deletecomment",
+                				data: comment
+                			}).success(function(data, status, headers, config) {
+                				if(data.success) {
+                					var index = scope.commentsData.indexOf(comment);
+                					scope.commentsData.splice(index,1);
+                					scope.showInfo("success", "删除评论成功");
+                				}else{
+                					scope.showInfo("error", "删除评论失败");
+                				}
+                			}).error(function(data, status, headers, config) {
+                				scope.showInfo("error", "删除评论失败");
+                			});
 				};
 				
             }
