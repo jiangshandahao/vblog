@@ -1,72 +1,105 @@
 var app = angular.module("articleModule",[]);
 
-app.controller("articleController",function($scope){
-	$scope.adate = article.adate;
-});
-
-app.controller("commentController",function($scope, $http){  
+app.controller("articleController",function($scope, $http, $timeout){
+	$scope.article = article;
 	$scope.commentsData = [];
-	var res = $http.get("http://localhost:3000/getcomment?pid="+ article._id);
+	$scope.goodActive  = (article.agood.indexOf(user._id) !== -1);
+	$scope.alertInfo = {
+		type: 'success',
+		info:"",
+		show:false,
+		showInfo: function(type, info) {
+			$scope.alertInfo.type = type; 
+			$scope.alertInfo.info = info;
+			$scope.alertInfo.show = true; 
+			$timeout(function() {
+				$scope.alertInfo.show = false;
+				$scope.alertInfo.info  = "";
+			}, 2000);
+		}
+	};
+	
+	
+	var res = $http.get("http://localhost:3000/getcomment?pid=" + article._id);
 	res.success(function(data, status, headers, config) {
-		if(!data.error){
+		if(!data.error) {
 			data.forEach(function(v, i) {
-				if(v.like.indexOf(user._id) !== -1){
-					v.like_active = true; 
-				}else{
-					v.like_active = false;  
+				if(v.like.indexOf(user._id) !== -1) {
+					v.like_active = true;
+				} else {
+					v.like_active = false;
 				}
-				if(v.unlike.indexOf(user._id) !== -1){
-					v.nolike_active = true; 
-				}else{
-					v.nolike_active = false;  
+				if(v.unlike.indexOf(user._id) !== -1) {
+					v.nolike_active = true;
+				} else {
+					v.nolike_active = false;
 				}
 			});
 			$scope.commentsData = data;
 		}
-		
+	
 	});
-
+	
+	$scope.goodArticle = function(){
+		if(user._id){
+			if($scope.goodActive){
+				var type = 'cancelgood';
+			}else{
+				var type = 'good';
+			}
+			var pInfo = {
+				article:article,
+				pid: article._id,
+				uid: user._id,
+				type:type
+			};
+			
+			$http({
+				method: "POST",
+				url: "http://localhost:3000/goodarticle",
+				data: pInfo
+			}).success(function(data, status, headers, config) {
+				if(data.success) {	
+					$scope.goodActive = !$scope.goodActive;
+					if($scope.goodActive) {
+						 $scope.article.agood.push(pInfo.uid);
+						 $scope.alertInfo.showInfo("success", "文章点赞成功");
+					} else {
+						$scope.article.agood.splice($scope.article.agood.indexOf(pInfo.uid), 1);
+						$scope.alertInfo.showInfo("success", "取消点赞成功");
+					}					
+				} else {
+					$scope.alertInfo.showInfo("error", "文章点赞失败");
+				}
+			}).error(function(data, status, headers, config) {
+				$scope.alertInfo.showInfo("error", "文章点赞失败");
+			});
+		}else{
+			$scope.alertInfo.showInfo("error", "此操作需要登录");
+		}
+	};
+	
+	
+	
+	
 });
 
- app.directive("comments",function($timeout,$http){
+ app.directive("comments",function($http){
         return {
             restrict:'AEC',
             replace:true,
             templateUrl:'../template/comments.html',
             scope:{
-				commentsData:'=commentsAttr'
+				commentsData:'=commentsAttr',
+				alertInfo: '=alertAttr'
 			},
 			//scope: true,//父元素继承也无法实现双向绑定,必须使用“=”
             link:function(scope, elem, attrs){
+
 				scope.errorshow = false;
-				scope.error_message = "";
-				scope.info = "";
-				scope.errorif = false; 
-				scope.successif = false; 
-				
 				scope.article = article;
 				scope.user = user;							
 				scope.content  = "";
-				
-				scope.showInfo  = function(type, info){
-					scope.content = info;
-					if(type == "success" ){
-						scope.successif = true;
-						scope.info = info;
-						$timeout(function() {
-							scope.successif = false;
-							scope.info = "";
-						}, 2000);
-					}else if(type == "error" ){
-						scope.errorif = true;
-						scope.error_message = info;
-						$timeout(function() {
-							scope.errorif = false;
-							scope.error_message = "";
-						}, 2000);
-					}
-					
-				};
 				
                 scope.newComment = function() {
 
@@ -88,13 +121,14 @@ app.controller("commentController",function($scope, $http){
 						}).success(function(data, status, headers, config) {
 							if(data.success){
 								scope.commentsData.unshift(data.comment);
-								scope.showInfo("success" , "添加评论成功");
+								scope.alertInfo.showInfo("success" , "添加评论成功");
+								scope.content = "";
 							}else {
-								scope.showInfo("error" , "添加评论失败");
+								scope.alertInfo.showInfo("error" , "添加评论失败");
 							}
 								
 						}).error(function(data, status, headers, config) {
-							scope.showInfo("error" , "添加评论失败");
+							scope.alertInfo.showInfo("error" , "添加评论失败");
 						});
                    }
                 };
@@ -117,31 +151,31 @@ app.controller("commentController",function($scope, $http){
                 					
                 					if(comment.like_active){
                 						comment.like.push(commentInfo.uid);
-                						scope.showInfo("success", "点赞成功");
+                						scope.alertInfo.showInfo("success", "点赞成功");
                 					}else{
                 						comment.like.splice(comment.like.indexOf(commentInfo.uid),1);
-                						scope.showInfo("error", "取消点赞成功");
+                						scope.alertInfo.showInfo("error", "取消点赞成功");
                 					}
                 					scope.commentsData[index] = comment;
                 					
                 				} else {
                 					if(comment.like_active){
-                						scope.showInfo("success", "取消点赞失败");
+                						scope.alertInfo.showInfo("success", "取消点赞失败");
                 					}else{
-                						scope.showInfo("error", "点赞失败");
+                						scope.alertInfo.showInfo("error", "点赞失败");
                 					}
                 				}
                 			
                 			}).error(function(data, status, headers, config) {
                 				if(comment.like_active) {
-                					scope.showInfo("success", "取消点赞失败");
+                					scope.alertInfo.showInfo("success", "取消点赞失败");
                 				} else {
-                					scope.showInfo("error", "点赞失败");
+                					scope.alertInfo.showInfo("error", "点赞失败");
                 				}
                 			});
                 			console.log(commentInfo);
                 		}else{
-                			scope.showInfo("error" , "此操作需要登录");
+                			scope.alertInfo.showInfo("error" , "此操作需要登录");
                 		}
 					
 				};
@@ -163,31 +197,31 @@ app.controller("commentController",function($scope, $http){
                 					
                 					if(comment.nolike_active){
                 						comment.unlike.push(commentInfo.uid);
-                						scope.showInfo("success", "踩评论成功");
+                						scope.alertInfo.showInfo("success", "踩评论成功");
                 					}else{
                 						comment.unlike.splice(comment.unlike.indexOf(commentInfo.uid),1);
-                						scope.showInfo("error", "取消踩评论成功");
+                						scope.alertInfo.showInfo("error", "取消踩评论成功");
                 					}
                 					scope.commentsData[index] = comment;
                 					
                 				} else {
                 					if(comment.nolike_active){
-                						scope.showInfo("success", "取消踩评论失败");
+                						scope.alertInfo.showInfo("success", "取消踩评论失败");
                 					}else{
-                						scope.showInfo("error", "踩评论失败");
+                						scope.alertInfo.showInfo("error", "踩评论失败");
                 					}
                 				}
                 			
                 			}).error(function(data, status, headers, config) {
                 				if(comment.nolike_active) {
-                					scope.showInfo("success", "取消踩评论失败");
+                					scope.alertInfo.showInfo("success", "取消踩评论失败");
                 				} else {
-                					scope.showInfo("error", "踩评论失败");
+                					scope.alertInfo.showInfo("error", "踩评论失败");
                 				}
                 			});
                 			console.log(commentInfo);
                 		}else{
-                			scope.showInfo("error" , "此操作需要登录");
+                			scope.alertInfo.showInfo("error" , "此操作需要登录");
                 		}
 					
 				};
@@ -201,12 +235,12 @@ app.controller("commentController",function($scope, $http){
                 				if(data.success) {
                 					var index = scope.commentsData.indexOf(comment);
                 					scope.commentsData.splice(index,1);
-                					scope.showInfo("success", "删除评论成功");
+                					scope.alertInfo.showInfo("success", "删除评论成功");
                 				}else{
-                					scope.showInfo("error", "删除评论失败");
+                					scope.alertInfo.showInfo("error", "删除评论失败");
                 				}
                 			}).error(function(data, status, headers, config) {
-                				scope.showInfo("error", "删除评论失败");
+                				scope.alertInfo.showInfo("error", "删除评论失败");
                 			});
 				};
 				

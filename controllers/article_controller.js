@@ -167,3 +167,71 @@ exports.getArticleById = function(req, res){
 	});
 };
 
+exports.goodArticleHandler = function(req, res){
+	if(!req.body.uid || !req.body.pid) {
+		res.send({
+			'error': "点赞失败"
+		});
+	} else {
+		ArticleModel.findOne({
+				"_id": new ObjectID(req.body.pid)
+			})
+			.exec(function(err, article) {
+				if(err) {
+					res.send({
+						'error': "点赞失败"
+					});
+				} else {
+					if(article.agood.indexOf(req.body.uid) === -1) {
+						if(req.body.type === 'good'){
+							article.update({
+									$push: {
+										agood: req.body.uid
+									}
+								})
+								.exec(function(err, updatedArticle) {
+									if(err) {
+										res.send({
+											'error': "点赞失败"
+										});
+									} else {
+										res.send({
+											'success': "点赞成功"
+										});
+									}
+								});
+						}else{
+							res.send({
+								'success': "点赞成功"
+							});
+						}
+						
+					} else {
+						if(req.body.type === 'cancelgood') {
+						article.update({
+								$pull: {
+									agood: req.body.uid
+								}
+							})
+							.exec(function(err, updatedComment) {
+								if(err) {
+									res.send({
+										'error': "取消点赞失败"
+									});
+								} else {
+									res.send({
+										'success': "取消点赞成功"
+									});
+								}
+							});
+						}else{
+							res.send({
+								'success': "取消点赞成功"
+							});
+						}
+					}
+	
+				}
+			});
+	}
+};

@@ -1,5 +1,6 @@
 var ArticleController = require('../controllers/article_controller.js');
 var CommentController = require('../controllers/comment_controller.js');
+var UserInfoController = require('../controllers/user_info_controller.js');
 
 module.exports = function(app){
 
@@ -23,6 +24,16 @@ app.get('/getarticles',ArticleController.getUserAritcles);
 //查看文章
 app.get('/article/:articleid', ArticleController.getArticleById);
 
+//点赞文章
+app.post('/goodarticle', [
+	UserInfoController.saveGoodArticle,
+	ArticleController.goodArticleHandler
+]);
+
+
+//新建评论
+app.post('/newcomment',checkLogin);
+app.post('/newcomment',CommentController.newComment);
 //查询评论列表
 app.get('/getcomment',CommentController.getCommentsByPid);
 //删除评论
@@ -32,9 +43,7 @@ app.post('/goodcomment',CommentController.goodCommentHandler);
 //倒踩评论
 app.post('/badcomment',CommentController.badCommentHandler);
 
-//提交评论
-app.post('/newcomment',checkLogin);
-app.post('/newcomment',CommentController.newComment);
+
 
 function checkLogin(req, res, next) {
 	if(!req.session.user) {

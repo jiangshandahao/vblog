@@ -11,8 +11,9 @@
 <div id = "nav2"></div>
 
 <div class = "container" ng-app="articleModule">
-
-<div class="pull-left">
+	
+<div class="pull-left" ng-controller = "articleController" >
+<div ng-class="{'error':'message-error','success':'message-info'}[alertInfo.type]" ng-cloak ng-if="alertInfo.show"><span>{{alertInfo.info}}</span></div>
   <!--文章内容页-->
   <div class="article-left-btn-group">
       <ul>
@@ -23,7 +24,7 @@
           <li id="shoucang1" rel="isshoucang"><a><i class="icon icon-article icon-article-col">收藏</i></a></li>
      </ul>
   </div>
-  <div class="article-wrap" ng-controller = "articleController">
+  <div class="article-wrap" >
      <h1 class="t-h1"><%= article.atitle %></h1>
      <div class="article-author">
         <a href="#" class="column-link" target="_blank"><%= article.mychannel %></a>
@@ -31,10 +32,10 @@
                 <a href="/u/<%= article.author_info.username %>" target="_blank"><%= article.author_info.username %></a>
         </span>
         <i class="icon icon-line"></i>
-        <span class="article-time">{{ adate | toTimeDiff }} </span>
+        <span class="article-time">{{ article.adate | toTimeDiff }} </span>
         <span class="article-share">收藏 <%= article.amark.length %></span>
         
-        <span ng-controller = "commentController" class="article-pl">评论{{commentsData.length}}</span>
+        <span class="article-pl">评论{{commentsData.length}}</span>
     </div>
      <div class="article-manage-bar"></div>             
      <div id="article_content" class="article-content-wrap">
@@ -46,72 +47,79 @@
       <div class="neirong-shouquan-public">
         <span>关注微信公众号微草帽，定时推送，福利互动精彩多</span>
       </div>
-   
+      
+      <div class="praise-box center-box" ng-class = "{active: goodActive}"  ng-click  = "goodArticle()" >
+      	<i class="icon icon-article-zan"></i><span class="num">{{article.agood.length}}</span>
+      </div>
+      
   	 <div class="tag-box">
     <ul class="transition">
-      <a class="tag" href="/tags/tag"><li class="transition">tag </li></a>
+      <a class="tag" href="/tags/tag"><li class="transition">tag</li></a>
     </ul>
   </div>
   </div>
-   <% if (article.status == 1) { %>
-   	<div ng-controller = "commentController">
-  		<comments comments-attr = "commentsData"></comments> 
-  	</div>
-   <% } %>
+  
   <!-- 相关文章 -->
-  <div class="interested-article-box" >
-    <span class="span-mark-author">相关文章</span>
-      <div class="article-list-box">
-        <div class="article-box transition">
-          <a href="#" target="_blank">
-             <img src="/images/143423905645.jpg" />
-          </a>
-          <div class="article-title">
-              <a href="#" target="_blank">学渣拍照秒变学霸，用了在线教育APP，中...</a>
-          </div>
-        </div>
-        <div class="article-box transition">
-            <a href="#" target="_blank">
-            <img src="/images/115048965285.jpg" />
-            </a>
-            <div class="article-title">
-            <a href="#" target="_blank">2015在线教育盘点：看网易、BAT、新...</a>
-            </div>
-        </div>
-        <div class="article-box transition">
-            <a href="#" target="_blank">
-               <img src="/images/081850014334.jpg" />
-            </a>
-            <div class="article-title">
-            <a href="#" target="_blank">今年的在线教育行业都有哪些动作？</a>
-            </div>
-        </div>
-        <div class="article-box transition">
-            <a href="#" target="_blank">
-           <img src="/images/141602574532.jpg" />
-           </a>
-          <div class="article-title">
-            <a href="#" target="_blank">BAT在在线教育撒大网，惜乎“最后一公里...</a>
-          </div>
-        </div>
-        <div class="article-box transition">
-          <a href="#" target="_blank">
-            <img src="/images/154800855674.jpg">
-          </a>
-          <div class="article-title">
-          <a href="#" target="_blank">LinkedIn收购Lynda之后，在线...</a>
-          </div>
-        </div>
-        <div class="article-box transition">
-            <a href="#" target="_blank">
-            <img src="/images/185434295619.jpg">
-            </a>
-            <div class="article-title">
-            <a href="#" target="_blank">一切刚开始没有收入的在线教育将终生...</a>
-            </div>
-        </div>
-      </div>  
+  <div class="interested-article-box">
+  	<span class="span-mark-author">相关文章</span>
+  	<div class="article-list-box">
+  		<div class="article-box transition">
+  			<a href="#" target="_blank">
+  				<img src="/images/143423905645.jpg" />
+  			</a>
+  			<div class="article-title">
+  				<a href="#" target="_blank">学渣拍照秒变学霸，用了在线教育APP，中...</a>
+  			</div>
+  		</div>
+  		<div class="article-box transition">
+  			<a href="#" target="_blank">
+  				<img src="/images/115048965285.jpg" />
+  			</a>
+  			<div class="article-title">
+  				<a href="#" target="_blank">2015在线教育盘点：看网易、BAT、新...</a>
+  			</div>
+  		</div>
+  		<div class="article-box transition">
+  			<a href="#" target="_blank">
+  				<img src="/images/081850014334.jpg" />
+  			</a>
+  			<div class="article-title">
+  				<a href="#" target="_blank">今年的在线教育行业都有哪些动作？</a>
+  			</div>
+  		</div>
+  		<div class="article-box transition">
+  			<a href="#" target="_blank">
+  				<img src="/images/141602574532.jpg" />
+  			</a>
+  			<div class="article-title">
+  				<a href="#" target="_blank">BAT在在线教育撒大网，惜乎“最后一公里...</a>
+  			</div>
+  		</div>
+  		<div class="article-box transition">
+  			<a href="#" target="_blank">
+  				<img src="/images/154800855674.jpg">
+  			</a>
+  			<div class="article-title">
+  				<a href="#" target="_blank">LinkedIn收购Lynda之后，在线...</a>
+  			</div>
+  		</div>
+  		<div class="article-box transition">
+  			<a href="#" target="_blank">
+  				<img src="/images/185434295619.jpg">
+  			</a>
+  			<div class="article-title">
+  				<a href="#" target="_blank">一切刚开始没有收入的在线教育将终生...</a>
+  			</div>
+  		</div>
+  	</div>
   </div>
+  
+  <div id = "pinglunsection"></div>
+
+   <% if (article.status == 1) { %>
+   <comments comments-attr = "commentsData" alert-attr = "alertInfo"></comments> 
+   <% } %>
+
 </div>
 </div>
 <div class="wrap-right pull-right">
