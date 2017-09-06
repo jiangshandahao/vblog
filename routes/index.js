@@ -4,6 +4,9 @@ var articles = require("./articles");
 var user_info = require("./user_info");
 var Geetest = require('../lib/gt-sdk');
 var ueditor = require("../lib/ueditor");
+
+var ChannelController = require('../controllers/channel_controller.js');
+
 module.exports = function(app){
 
 /*
@@ -17,6 +20,9 @@ app.get('/', function(req, res, next) {
       error: req.flash('error').toString()
     });
 });
+
+
+app.get('/getchannels', ChannelController.getChannelsByShowType);
 
 // pc 端接口
 

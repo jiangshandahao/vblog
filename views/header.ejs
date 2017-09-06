@@ -14,7 +14,7 @@
 
 </head>
 
-<body>
+<body ng-app = "rootModule">
 
 <% if (success) { %>
 	<div class="message-prompt"><span><%= success %></span></div>
@@ -22,16 +22,13 @@
 <% if (error) { %>
 	<div class="message-prompt error"><span><%= error %></span></div>
 <% } %>
-<div id = "nav">
-  <div class = "nav-center">
+<div id = "nav" >
+  <div class = "nav-center" ng-controller = "headerController">
     <div class = "nav-header">
         <a href = "/" target="_blank">vBlog</a>
       </div>
-    <ul class = "nav-left">
-        <li><a href = "#" target="_blank">八卦互联网</a></li>
-        <li><a href = "#" target="_blank">干货分享</a></li>
-        <li><a href = "#" target="_blank">码农进阶</a></li>
-        <li><a href = "#" target="_blank">寻找组织</a></li>
+    	  <ul class = "nav-left">
+        <channels channels-attr = "channelsData"></channels>
       </ul>
       <ul class = "nav-right">
       	<li><a href = "#"><i class="icon icon-search"></i>搜索</a></li>
@@ -42,7 +39,6 @@
                   <span>微信扫一扫</span>
               </div>
               <img src="/images/qrcode_for_gh_420b8d2e4eeb_430.jpg">              
-             
            </div>
         </li>
        
@@ -57,3 +53,6 @@
       </ul>
   </div>
 </div>
+<script src="/lib/angular.min.js"></script> 
+<script src="/lib/angular-ui-router.min.js"></script>
+<script src="/javascripts/header.js"></script> 

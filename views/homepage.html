@@ -11,7 +11,7 @@
 	
 </script>
 <div id = "nav2"></div>
-<div class = "container" ng-app = "homePageModule" ng-controller = "homeController" ng-init = "requid = '<%=req_user._id%>' ; completed = false">
+<div class = "container" ng-controller = "homeController" ng-init = "requid = '<%=req_user._id%>' ; completed = false">
 	
 <div ng-class="{'error':'message-error','success':'message-info'}[alertInfo.type]" ng-cloak ng-if="alertInfo.show"><span>{{alertInfo.info}}</span></div>
 
@@ -59,7 +59,5 @@
 </div>
 </div>
 
-<script src="/lib/angular.min.js"></script> 
-<script src="/lib/angular-ui-router.min.js"></script> 
 <script src = "/javascripts/homepage.js"></script>
 <%- include footer%>

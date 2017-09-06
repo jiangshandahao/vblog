@@ -8,6 +8,8 @@ var handlerEmbed = function(captchaObj) {
 				$("#notice")[0].className = "hide";
 			}, 2000);
 			e.preventDefault();
+		}else{
+			$('form').submit();
 		}
 	});
 	// 将验证码加到id为captcha的元素里，同时会有三个input的值：geetest_challenge, geetest_validate, geetest_seccode

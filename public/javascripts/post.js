@@ -40,8 +40,6 @@ $().ready(function() {
   });
 });
 
-var app = angular.module("postModule",[]);
-
 app.controller("EditController",function($scope, $http){
 	
 	var res = $http.get("http://localhost:3000/getarticles?type=drafts");

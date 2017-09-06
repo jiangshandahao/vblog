@@ -95,6 +95,7 @@ exports.signUpValidate = function(req, res, next){
 
 //注册，向数据库存储新用户
 exports.signUp = function(req, res){
+
   var userModel = new UserModel({
   	'username':req.body.username,
   	'mobile':req.body.mobile,
@@ -170,7 +171,6 @@ exports.loginValidate = function(req, res, next){
 
 //注册，向数据库存储新用户
 exports.logIn = function(req, res){
-	
   UserModel.findOne({ mobile: req.body.mobile })
   .exec(function(err, user) {
     if (!user){

@@ -1,4 +1,3 @@
-var app = angular.module('homePageModule',['ui.router']);
 
 app.controller("homeController",function($scope, $http, $timeout){
 	$scope.follow_state_text = "关注";
@@ -142,7 +141,7 @@ app.config(function($stateProvider, $urlRouterProvider){
 	$stateProvider.state("mydrafts", {
 		url:"/mydrafts",
 		templateUrl:"../template/myarticle.html",
-		controller:function($scope, $http){
+		controller:function($scope,$http){
 			$scope.page_title = "草稿箱";
 			var res = $http.get("http://localhost:3000/getarticles?type=drafts");
 			res.success(function(data, status, headers, config) {

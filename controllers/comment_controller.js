@@ -29,7 +29,6 @@ exports.getCommentsByPid = function(req, res){
 };
 
 exports.newComment = function(req, res){
-	console.log(req.body);
 	var commentModel = new CommentModel({
 		  pid: new ObjectID(req.body.pid),
 		  username: req.body.username,

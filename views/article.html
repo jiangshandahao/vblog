@@ -10,7 +10,7 @@
 </script>
 <div id = "nav2"></div>
 
-<div class = "container" ng-app="articleModule">
+<div class = "container" >
 	
 <div class="pull-left" ng-controller = "articleController" >
 <div ng-class="{'error':'message-error','success':'message-info'}[alertInfo.type]" ng-cloak ng-if="alertInfo.show"><span>{{alertInfo.info}}</span></div>
@@ -155,7 +155,6 @@
     </div>
 
 </div>
-<script src="/lib/angular.min.js"></script> 
 
 <script src = "/javascripts/article.js"></script>
 

@@ -1,4 +1,3 @@
-var app = angular.module("articleModule",[]);
 
 app.controller("articleController",function($scope, $http, $timeout){
 	$scope.article = article;
