@@ -21,7 +21,7 @@
           <li><a><i class="icon icon-article icon-article-pyq"></i></a></li>
           <li><a href=""><i class="icon icon-article icon-article-qzone"></i></a></li>
           <li><a href = "#pinglunsection"><i class="icon icon-article icon-article-pl">评论</i></a></li>
-          <li id="shoucang1" rel="isshoucang"><a><i class="icon icon-article icon-article-col">收藏</i></a></li>
+          <li  ng-click  = "markArticle()" ng-class = "{active: markActive}"><a><i class="icon icon-article icon-article-col">收藏</i></a></li>
      </ul>
   </div>
   <div class="article-wrap" >
@@ -33,7 +33,7 @@
         </span>
         <i class="icon icon-line"></i>
         <span class="article-time">{{ article.adate | toTimeDiff }} </span>
-        <span class="article-share">收藏 <%= article.amark.length %></span>
+        <span class="article-share">收藏 {{article.amark.length }}</span>
         
         <span class="article-pl">评论{{commentsData.length}}</span>
     </div>

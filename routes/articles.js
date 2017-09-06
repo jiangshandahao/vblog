@@ -29,7 +29,11 @@ app.post('/goodarticle', [
 	UserInfoController.saveGoodArticle,
 	ArticleController.goodArticleHandler
 ]);
-
+//收藏文章
+app.post('/markarticle', [
+	UserInfoController.saveMarkArticle,
+	ArticleController.markArticleHandler
+]);
 
 //新建评论
 app.post('/newcomment',checkLogin);

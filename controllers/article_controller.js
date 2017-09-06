@@ -235,3 +235,71 @@ exports.goodArticleHandler = function(req, res){
 			});
 	}
 };
+exports.markArticleHandler = function(req, res) {
+	if(!req.body.uid || !req.body.pid) {
+		res.send({
+			'error': "收藏文章失败"
+		});
+	} else {
+		ArticleModel.findOne({
+				"_id": new ObjectID(req.body.pid)
+			})
+			.exec(function(err, article) {
+				if(err) {
+					res.send({
+						'error': "收藏文章失败"
+					});
+				} else {
+					if(article.amark.indexOf(req.body.uid) === -1) {
+						if(req.body.type === 'mark') {
+							article.update({
+									$push: {
+										amark: req.body.uid
+									}
+								})
+								.exec(function(err, updatedArticle) {
+									if(err) {
+										res.send({
+											'error': "收藏文章失败"
+										});
+									} else {
+										res.send({
+											'success': "收藏文章成功"
+										});
+									}
+								});
+						} else {
+							res.send({
+								'success': "收藏文章成功"
+							});
+						}
+
+					} else {
+						if(req.body.type === 'cancelmark') {
+							article.update({
+									$pull: {
+										amark: req.body.uid
+									}
+								})
+								.exec(function(err, updatedArticle) {
+									if(err) {
+										res.send({
+											'error': "收藏文章失败"
+										});
+									} else {
+										res.send({
+											'success': "收藏文章成功"
+										});
+									}
+								});
+						} else {
+							res.send({
+								'success': "收藏文章成功"
+							});
+						}
+					}
+
+				}
+			});
+	}
+};

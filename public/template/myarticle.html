@@ -1,14 +1,16 @@
+<div>
 <h2>{{page_title}}</h2>
 
-<div style = "padding: 16px; text-align: center;"><img src = "../images/loading.gif" ng-if = "!completed"/></div>
+<div style = "padding: 16px; text-align: center;" ng-if = "!completed"><img src = "../images/loading.gif" /></div>
 
 <div ng-if = "completed" >
 <p class = "zanwu" ng-if = "!myarticles.length">暂无文章</p>
+
 <div class="mod-b" ng-repeat = "myarticle in myarticles track by $index">
 	<!--栏目链接-->
 	<a href="#" class="column-link" target="_blank">{{myarticle.mychannel}}</a>
 	<div class="mod-thumb">
-		<a class="transition" href="" target="_blank">
+		<a class="transition" href="/article/{{myarticle._id}}" target="_blank">
 			<img style="display: inline;" src="{{myarticle.main_picture}}" alt="{{myarticle.atitle}}">
 		</a>
 	</div>
@@ -22,12 +24,13 @@
 			<a href="/u/{{myarticle.author_info.username}}" target="_blank">
 				<span class="author-name">{{myarticle.author_info.username}}</span>
 			</a>
-			<span class="time">{{myarticle.adate}}</span>
-			<i class="icon icon-cmt"></i><em>{{myarticle.comments.length}}</em>
+			<span class="time">{{myarticle.adate | toTimeDiff}}</span>
 			<i class="icon icon-fvr"></i><em>{{myarticle.amark.length}}</em>
-			<i class="icon icon-dianzan"></i><em>{{myarticle.agood.length}}</em>
+			<i class="icon icon-dianzan"></i><em>{{myarticle.agood.length }}</em>
 		</div>
 		<div class="mob-sub">{{myarticle.abrief}}</div>
 	</div>
 </div>  
+</div>
+
 </div>

@@ -1,6 +1,19 @@
 <%- include header %>
+<script type="text/javascript">
+	var is_now_user = <%- is_now_user%>;
+ 	
+ 	var req_user = JSON.parse('<%- JSON.stringify(req_user)%>');
+	
+	var user = "";
+	if('<%=user%>'){
+		var user = JSON.parse('<%- JSON.stringify(user)%>');
+	}
+	
+</script>
 <div id = "nav2"></div>
-<div class = "container" ng-app = "homePageModule" ng-init = "requid = '<%=req_user._id%>' ; completed = false">
+<div class = "container" ng-app = "homePageModule" ng-controller = "homeController" ng-init = "requid = '<%=req_user._id%>' ; completed = false">
+	
+<div ng-class="{'error':'message-error','success':'message-info'}[alertInfo.type]" ng-cloak ng-if="alertInfo.show"><span>{{alertInfo.info}}</span></div>
 
 <div class = "pull-left" id = "homepage">
  	<div ui-view ></div>
@@ -16,24 +29,29 @@
         </div>
         <div class="author-name">
             <a href="#"><%=req_user.username%></a>
-     
         </div>
        
         <ul class="author-article-pl">
 			<% if (is_now_user) { %>
-				<li><a href="">我的收藏</a></li>
+				<li><a ui-sref="marks">收藏的文章</a></li>
 				<li>
-					<a href="">我点赞的文章</a>
+					<a ui-sref="goods">点赞的文章</a>
 				</li>
 				<li><a href="">我的关注</a></li>
-				<li><a ui-sref = "myarticle">我的文章</a></li>
+				<li>
+					<a href="">我的粉丝</a>
+				</li>
+				<li><a ui-sref = "myarticle">发布的文章</a></li>
 				<li><a ui-sref ="mydrafts">草稿箱</a></li>
 				<li><a ui-sref ="mychecking">待审核文章</a></li>
 				<li><a href="">未通过文章</a></li>
 				<li><a href="">回收站</a></li>
+				<li>
+					<a href="/updateuserinfo">用户设置</a>
+				</li>
 			<% }else{ %>
-				<li class="follow">
-					<a href="/follow">关注</a>
+				<li>
+					<a ng-click = "follow()">{{follow_state}}</a>
 				</li>
 			<% } %>
        </ul>

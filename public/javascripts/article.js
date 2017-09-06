@@ -4,6 +4,7 @@ app.controller("articleController",function($scope, $http, $timeout){
 	$scope.article = article;
 	$scope.commentsData = [];
 	$scope.goodActive  = (article.agood.indexOf(user._id) !== -1);
+	$scope.markActive = (article.amark.indexOf(user._id) !== -1);
 	$scope.alertInfo = {
 		type: 'success',
 		info:"",
@@ -80,8 +81,44 @@ app.controller("articleController",function($scope, $http, $timeout){
 	};
 	
 	
+	$scope.markArticle = function() {
+		if(user._id) {
+			if($scope.markActive) {
+				var type = 'cancelmark';
+			} else {
+				var type = 'mark';
+			}
+			var pInfo = {
+				article: article,
+				pid: article._id,
+				uid: user._id,
+				type: type
+			};
 	
-	
+			$http({
+				method: "POST",
+				url: "http://localhost:3000/markarticle",
+				data: pInfo
+			}).success(function(data, status, headers, config) {
+				if(data.success) {
+					$scope.markActive = !$scope.markActive;
+					if($scope.markActive) {
+						$scope.article.amark.push(pInfo.uid);
+						$scope.alertInfo.showInfo("success", "文章收藏成功");
+					} else {
+						$scope.article.amark.splice($scope.article.amark.indexOf(pInfo.uid), 1);
+						$scope.alertInfo.showInfo("success", "取消收藏成功");
+					}
+				} else {
+					$scope.alertInfo.showInfo("error", "取消收藏成功");
+				}
+			}).error(function(data, status, headers, config) {
+				$scope.alertInfo.showInfo("error", "取消收藏成功");
+			});
+		} else {
+			$scope.alertInfo.showInfo("error", "此操作需要登录");
+		}
+	};
 });
 
  app.directive("comments",function($http){

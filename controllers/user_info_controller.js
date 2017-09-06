@@ -86,3 +86,276 @@ exports.saveGoodArticle = function(req, res, next){
 
 
 };
+
+//保存收藏过的文章
+exports.saveMarkArticle = function(req, res, next){
+	UserInfoModel.findOne({
+			user_id: new ObjectID(req.body.uid)
+		})
+		.exec(function(err, userinfo) {
+			if(err) {
+				res.send({
+					'error': "收藏文章失败"
+				});
+			} else {
+				if(userinfo) {//如果已经存在userinfo
+					var index = userinfo.marks.findIndex(function(v){
+						return v._id ===  req.body.pid;
+					});
+					if(index === -1){
+						if(req.body.type === 'mark') {
+							userinfo.update({
+									$push: {
+										marks: req.body.article
+									}
+								})
+								.exec(function(err, updatedUserinfo) {
+									if(err) {
+										res.send({
+											'error': "收藏文章失败"
+										});
+									} else {
+										next();
+									}
+							});
+						}else{
+							next();
+						}
+					}else{
+						if(req.body.type === 'cancelmark') {
+							var p = userinfo.marks[index];
+							userinfo.update({
+									$pull: {
+										marks:p
+									}
+								})
+								.exec(function(err, updatedUserinfo) {
+									if(err) {
+										res.send({
+											'error': "收藏文章失败"
+										});
+									} else {
+										next();
+									}
+							});
+						}else{
+							next();
+						}
+					}
+					
+				}else{
+					if(req.body.type === 'mark') {
+						var userinfoModel = new UserInfoModel({
+							user_id: req.body.uid,
+							marks: [req.body.article],
+							goods: [],
+							followers:[],
+							idols:[]
+						});
+						
+						userinfoModel.save(function(err, userinfo) {
+							if(err) {
+								res.send({
+									'error': "收藏文章失败"
+								});
+							} else {
+								next();
+							}
+						});
+					}else{
+						next();
+					}
+				}
+			}
+	});
+
+};
+
+//获取用户收藏的文章
+exports.getUserMarks = function(req, res){
+	var uid = !req.query.requid == false ? req.query.requid : req.session.user._id;
+	UserInfoModel.findOne({
+			user_id: new ObjectID(uid)
+		})
+		.exec(function(err, userinfo) {
+			if(err) {
+				req.flash('error', "获取收藏文章列表失败");
+				res.json([]);
+			} else {
+				res.json(userinfo.marks);
+			}
+	
+		});
+};
+
+//获取用户点赞的文章
+exports.getUserGoods = function(req, res){
+	var uid = !req.query.requid == false ? req.query.requid : req.session.user._id;
+	UserInfoModel.findOne({
+			user_id: new ObjectID(uid)
+		})
+		.exec(function(err, userinfo) {
+			if(err) {
+				req.flash('error', "获取收藏文章列表失败");
+				res.json([]);
+			} else {
+				res.json(userinfo.goods);
+			}
+	
+		});
+};
+
+//获取指定ID的用户信息
+exports.getUserInfoById = function(req, res){
+	var uid = !req.query.uid == false ? req.query.uid : req.session.user._id;
+	UserInfoModel.findOne({
+			user_id: new ObjectID(uid)
+		})
+		.exec(function(err, userinfo) {
+			if(err) {
+				req.flash('error', "获取收藏文章列表失败");
+				res.send({
+					'error': "获取收藏文章列表失败"
+				});
+			} else {
+				res.json(userinfo);
+			}
+	
+		});
+};
+
+
+//我关注别人--> 向别人用户的followers写入数据
+exports.saveFollow = function(req, res, next){
+	
+	var now_user =  req.body.now_user;
+	var req_user = req.body.req_user;
+	console.log(req.body);
+	UserInfoModel.findOne({
+			user_id: new ObjectID(req_user._id)
+		})
+		.exec(function(err, userinfo) {
+			if(err) {
+				res.send({
+					'error': "关注失败"
+				});
+			} else {
+				if(userinfo) { //如果已经存在userinfo
+					if(req.body.type === 'follow') {
+						userinfo.update({
+								$push: {
+									followers: now_user
+								}
+							})
+							.exec(function(err, updatedUserinfo) {
+								if(err) {
+									res.send({
+										'error': "关注失败"
+									});
+								} else {
+									next();
+								}
+							});
+					} else {
+						next();
+					}
+					
+				} else {
+					if(req.body.type === 'follow') {
+						var userinfoModel = new UserInfoModel({
+							user_id: req_user._id,
+							marks: [],
+							goods: [],
+							followers: [now_user],
+							idols: []
+						});
+					
+						userinfoModel.save(function(err, userinfo) {
+							if(err) {
+								res.send({
+									'error': "关注失败"
+								});
+							} else {
+								next();
+							}
+						});
+					} else {
+						next();
+					}
+				}
+			}
+		});
+};
+
+//我关注别人--> 向自己的idols写入数据
+exports.saveIdols = function(req, res){
+	
+	var now_user =  req.body.now_user;
+	var req_user = req.body.req_user;
+	
+	UserInfoModel.findOne({
+			user_id: new ObjectID(now_user._id)
+		})
+		.exec(function(err, userinfo) {
+			if(err) {
+				res.send({
+					'error': "关注失败"
+				});
+			} else {
+				if(userinfo) { //如果已经存在userinfo
+					if(req.body.type === 'follow') {
+						userinfo.update({
+								$push: {
+									idols: req_user
+								}
+							})
+							.exec(function(err, updatedUserinfo) {
+								if(err) {
+									res.send({
+										'error': "关注失败"
+									});
+								} else {
+									res.send({
+										'success': "关注成功"
+									});
+								}
+							});
+					} else {
+						res.send({
+							'success': "关注成功"
+						});
+					}
+					
+				} else {
+					if(req.body.type === 'follow') {
+						var userinfoModel = new UserInfoModel({
+							user_id: now_user._id,
+							marks: [],
+							goods: [],
+							followers: [],
+							idols: [req_user]
+						});
+					
+						userinfoModel.save(function(err, userinfo) {
+							if(err) {
+								res.send({
+									'error': "关注失败"
+								});
+							} else {
+								res.send({
+									'success': "关注成功"
+								});
+							}
+						});
+					} else {
+						res.send({
+							'success': "关注成功"
+						});
+					}
+				}
+			}
+		});
+};
+	
+	
+	

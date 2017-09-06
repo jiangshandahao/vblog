@@ -1,6 +1,7 @@
 var path = require('path');
 var users = require("./users");
 var articles = require("./articles");
+var user_info = require("./user_info");
 var Geetest = require('../lib/gt-sdk');
 var ueditor = require("../lib/ueditor");
 module.exports = function(app){
@@ -111,7 +112,7 @@ app.use("/ueditor/ue", ueditor(path.join(__dirname, 'public'), {
 
 users(app);
 articles(app);
-
+user_info(app);
 
 
 };
