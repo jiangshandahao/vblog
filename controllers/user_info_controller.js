@@ -205,7 +205,7 @@ exports.getUserGoods = function(req, res){
 		});
 };
 
-//获取指定ID的用户信息
+//获取指定ID的用户关注
 exports.getUserInfoById = function(req, res){
 	var uid = !req.query.uid == false ? req.query.uid : req.session.user._id;
 	UserInfoModel.findOne({
@@ -213,12 +213,17 @@ exports.getUserInfoById = function(req, res){
 		})
 		.exec(function(err, userinfo) {
 			if(err) {
-				req.flash('error', "获取收藏文章列表失败");
 				res.send({
-					'error': "获取收藏文章列表失败"
+					'error': "获取用户信息失败"
 				});
 			} else {
-				res.json(userinfo);
+				if(userinfo){
+					res.json(userinfo);
+				}else{
+					res.send({
+						'error': "获取用户信息失败"
+					});
+				}
 			}
 	
 		});
@@ -288,7 +293,7 @@ exports.saveFollow = function(req, res, next){
 };
 
 //我关注别人--> 向自己的idols写入数据
-exports.saveIdols = function(req, res){
+exports.saveIdol = function(req, res){
 	
 	var now_user =  req.body.now_user;
 	var req_user = req.body.req_user;
@@ -357,5 +362,99 @@ exports.saveIdols = function(req, res){
 		});
 };
 	
+exports.cancelFollow = function(req, res, next){
 	
+	var now_user =  req.body.now_user;
+	var req_user = req.body.req_user;
+	
+	UserInfoModel.findOne({
+			user_id: new ObjectID(now_user._id)
+		})
+		.exec(function(err, userinfo) {
+			if(err) {
+				res.send({
+					'error': "取消关注失败"
+				});
+			} else {
+				if(userinfo) { //如果已经存在userinfo
+					var index = userinfo.idols.findIndex(function(v){
+						return v._id ===  req_user._id;
+					});
+					if(index !== -1) {
+						var p = userinfo.idols[index];
+						userinfo.update({
+								$pull: {
+									idols: p
+								}
+							})
+							.exec(function(err, updatedUserinfo) {
+								if(err) {
+									res.send({
+										'error': "取消关注失败"
+									});
+								} else {
+									next();
+								}
+							});
+					} else {
+						next();
+					}
+					
+				} else {
+					next();
+				}
+			}
+		});
+};
+
+exports.cancelIdol = function(req, res){
+	
+	var now_user =  req.body.now_user;
+	var req_user = req.body.req_user;
+	
+	UserInfoModel.findOne({
+			user_id: new ObjectID(req_user._id)
+		})
+		.exec(function(err, userinfo) {
+			if(err) {
+				res.send({
+					'error': "取消关注失败"
+				});
+			} else {
+				if(userinfo) { //如果已经存在userinfo
+					var index = userinfo.followers.findIndex(function(v){
+						return v._id ===  now_user._id;
+					});
+					if(index !== -1) {
+						var p = userinfo.followers[index];
+						userinfo.update({
+								$pull: {
+									followers: p
+								}
+							})
+							.exec(function(err, updatedUserinfo) {
+								if(err) {
+									res.send({
+										'error': "取消关注失败"
+									});
+								} else {
+									res.send({
+										'success': "取消关注成功"
+									});
+								}
+							});
+					} else {
+						res.send({
+							'success': "取消关注成功"
+						});
+					}
+					
+				} else {
+					res.send({
+						'success': "取消关注成功"
+					});
+				}
+			}
+		});
+};
 	

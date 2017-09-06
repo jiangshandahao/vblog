@@ -14,7 +14,9 @@ app.get('/usermarks', UserInfoController.getUserMarks);
 app.get('/usergoods', UserInfoController.getUserGoods);
 
 //关注别人
-app.post('/follow', [UserInfoController.saveFollow, UserInfoController.saveIdols]);
+app.post('/follow', [UserInfoController.saveFollow, UserInfoController.saveIdol]);
+//取消关注
+app.post('/canclefollow', [UserInfoController.cancelFollow, UserInfoController.cancelIdol]);
 
 
 };
