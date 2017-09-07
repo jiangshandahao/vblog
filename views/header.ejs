@@ -13,8 +13,7 @@
 <script charset="utf-8" src ="/lib/jquerysession.js"></script>
 
 </head>
-
-<body ng-app = "rootModule">
+<body ng-app = "rootModule" ng-class = "{'modal-open': modalOpen}" ng-controller = "headerController">
 
 <% if (success) { %>
 	<div class="message-prompt"><span><%= success %></span></div>
@@ -22,16 +21,21 @@
 <% if (error) { %>
 	<div class="message-prompt error"><span><%= error %></span></div>
 <% } %>
+<searchbox modal-open = "modalOpen"></searchbox>
 <div id = "nav" >
-  <div class = "nav-center" ng-controller = "headerController">
+  <div class = "nav-center" >
     <div class = "nav-header">
         <a href = "/" target="_blank">vBlog</a>
       </div>
     	  <ul class = "nav-left">
-        <channels channels-attr = "channelsData"></channels>
+        <li ng-repeat = "channel in channelsData">
+			<a ng-href = "http://localhost:3000/getchannelarticles?channel={{channel.channel_name}}" target="_blank">
+				{{channel.channel_name}}
+			</a>
+		</li>
       </ul>
       <ul class = "nav-right">
-      	<li><a href = "#"><i class="icon icon-search"></i>搜索</a></li>
+      	<li ng-click = "searchContent()"><a><i class="icon icon-search"></i>搜索</a></li>
         <li class = "gongzhonghao">
           <a href = "#"><i class="icon icon-sm-phone"></i>公众号</a>
           <div class="app-guide-box" >

@@ -76,7 +76,7 @@ app.controller("EditController",function($scope, $http){
 		console.log("获取文章列表失败");
 	});	
 	
-	
+	console.log($scope.channelsData);
 	
 	$scope.Channels = [{ id: 1, name: '互联网资讯', group: '文章分类' }, { id: 2, name: '干货分享', group: '文章分类' }, { id: 3, name: '码农进阶',group:'文章分类' }];
 	

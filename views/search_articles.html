@@ -1,0 +1,21 @@
+<%- include header %>
+<script type="text/javascript">
+	
+	var articles = JSON.parse('<%- JSON.stringify(articles)%>');
+	var page_title = '<%= title%>';
+</script>
+<div id = "nav2"></div>
+<div class = "container" ng-controller = "searchArticleController" ng-init = " completed = false">
+
+<div class = "pull-left" id = "homepage">
+ 	<sarticles articles-attr = "articles"></sarticles>
+</div>
+
+
+<div class="pull-right">
+   
+</div>
+</div>
+
+<script src = "/javascripts/search_articles.js"></script>
+<%- include footer%>

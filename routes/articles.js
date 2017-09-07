@@ -47,7 +47,11 @@ app.post('/goodcomment',CommentController.goodCommentHandler);
 //倒踩评论
 app.post('/badcomment',CommentController.badCommentHandler);
 
+//查询评论列表
+app.get('/getchannelarticles',ArticleController.getChannelArticles);
 
+//查询评论列表
+app.get('/search',ArticleController.searchArticles);
 
 function checkLogin(req, res, next) {
 	if(!req.session.user) {

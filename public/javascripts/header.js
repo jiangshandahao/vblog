@@ -1,4 +1,13 @@
+
+function checkinput(){
+	var input = $("#search-input").val();
+	if(input ==  null || input == ''){
+		return false;
+	}
+        return true;
+}
 var app = angular.module("rootModule",['ui.router']);
+
 app.filter("toTimeDiff",function(){
         return function(inputTime){
 	        	var now = new Date(),
@@ -30,6 +39,7 @@ app.filter("toTimeDiff",function(){
  });
  
 app.controller("headerController",function($scope, $http, $timeout){
+	$scope.modalOpen = false;
 	$scope.channelsData = [];
 	var res = $http.get("http://localhost:3000/getchannels?showtype=header");
 	
@@ -38,15 +48,28 @@ app.controller("headerController",function($scope, $http, $timeout){
 			$scope.channelsData = data;
 		}
 	});
+	
+	
+	$scope.searchContent = function(){
+		$scope.modalOpen = !$scope.modalOpen;
+	};
 });
 
-app.directive("channels",function($http){
+
+app.directive("searchbox", function($http) {
 	return {
-		restrict:'AEC',
-		replace:true,
-		template:'<li ng-repeat = "channel in channelsData"><a href = "#" target="_blank">{{channel.channel_name}}</a></li>',
+		restrict: 'AEC',
+		replace: true,
+		templateUrl:"../template/search.html",
 		scope:{
-			channelsData:'=channelsAttr'
-		}
+			modalOpen:'=modalOpen'
+		},
+		//scope: true,//父元素继承也无法实现双向绑定,必须使用“=”
+        link:function(scope, elem, attrs){
+        		scope.closeBox = function(){
+        			scope.modalOpen =  false;
+        		};
+        }
+
 	};
 });

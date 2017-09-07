@@ -167,6 +167,7 @@ exports.getArticleById = function(req, res){
 	});
 };
 
+//文章点赞
 exports.goodArticleHandler = function(req, res){
 	if(!req.body.uid || !req.body.pid) {
 		res.send({
@@ -235,6 +236,8 @@ exports.goodArticleHandler = function(req, res){
 			});
 	}
 };
+
+//文章收藏
 exports.markArticleHandler = function(req, res) {
 	if(!req.body.uid || !req.body.pid) {
 		res.send({
@@ -302,4 +305,39 @@ exports.markArticleHandler = function(req, res) {
 				}
 			});
 	}
+};
+//获得某一个频道的文章
+exports.getChannelArticles = function(req, res){
+	
+	var channel = !req.query.channel ? "" : req.query.channel;
+	ArticleModel.find({
+			mychannel: channel
+		})
+		.exec(function(err, articles) {
+			if(err) {
+				req.flash('error', "获取文章失败");
+				res.redirect('/');
+			} else {
+				res.render('search_articles', {
+					title: channel,
+					user: req.session.user,
+					articles: articles,
+					success: req.flash('success').toString(),
+					error: req.flash('error').toString()
+				});
+			}
+	
+		});
+};
+
+exports.searchArticles = function(req, res){
+	if(req.query.sword){
+		var sword  = req.query.sword;
+		console.log(sword);
+
+	}else{
+		req.flash('error', "搜索文章失败");
+		res.redirect('/');
+	}
+	
 };

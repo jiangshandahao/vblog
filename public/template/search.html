@@ -1,0 +1,30 @@
+<div class="search-box" ng-class = "{active: modalOpen}" id="search-box">
+    <i class="icon icon-search-close" ng-click = "closeBox()"></i>
+
+    <div class="search-content" ng-class = "{'overlay-dialog-animate': modalOpen}" >
+
+        <div class="search-input">
+            <form role="search" method="get" action="/search" onsubmit="return checkinput()">
+                <button type="submit"></button>
+                <input placeholder="请输入关键字" name="sword" id="search-input">
+           </form>
+        </div>
+        
+        <div class="search-history search-hotkey">
+            <strong>热搜词</strong>
+            <ul>
+                <li class="transition"><a href="/search.html?s=数码">数码</a></li>
+                <li class="transition"><a href="/search.html?s=科技">科技</a></li>
+                <li class="transition"><a href="/search.html?s=互联网">互联网</a></li>
+                <li class="transition"><a href="/search.html?s=汽车之家">汽车之家</a></li>
+                <li class="transition"><a href="/search.html?s=Uber">Uber</a></li>
+                <li class="transition"><a href="/search.html?s=支付宝">支付宝</a></li>
+                <li class="transition"><a href="/search.html?s=大数据">大数据</a></li>
+                <li class="transition"><a href="/search.html?s=创业">创业</a></li>
+                <li class="transition"><a href="/search.html?s=旅游">旅游</a></li>
+                <li class="transition"><a href="/search.html?s=美团">美团</a></li>
+                <li class="transition"><a href="/search.html?s=社交">社交</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

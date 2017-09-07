@@ -8,7 +8,7 @@
 
 <div class="mod-b" ng-repeat = "myarticle in myarticles track by $index">
 	<!--栏目链接-->
-	<a href="#" class="column-link" target="_blank">{{myarticle.mychannel}}</a>
+	<a href="http://localhost:3000/getchannelarticles?channel={{myarticle.mychannel}}" class="column-link" target="_blank">{{myarticle.mychannel}}</a>
 	<div class="mod-thumb">
 		<a class="transition" href="/article/{{myarticle._id}}" target="_blank">
 			<img style="display: inline;" src="{{myarticle.main_picture}}" alt="{{myarticle.atitle}}">
