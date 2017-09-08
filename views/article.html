@@ -1,7 +1,8 @@
 <%- include header %>
 <script type="text/javascript">
-	var article = JSON.parse('<%- JSON.stringify(article)%>'); 
-	
+
+	var article = JSON.stringify('<%- article %>'); 
+	console.log(article);
 	var user = "";
 	if('<%=user%>'){
 		var user = JSON.parse('<%- JSON.stringify(user)%>');

@@ -38,17 +38,32 @@ app.filter("toTimeDiff",function(){
         };
  });
  
-app.controller("headerController",function($scope, $http, $timeout){
+ //Factories
+ app.factory('channelServices', ['$http', function($http) {
+ 	var factoryDefinitions = {
+ 		getChannels: function() {
+ 			var res = $http.get("http://localhost:3000/getchannels?showtype=header");		
+ 			res.success(function(data, status, headers, config) {
+ 				if(!data.error) {
+ 					return data;
+ 				}
+ 			});
+ 			return res; 
+ 		}
+ 	};
+ 	return factoryDefinitions;
+ }]);
+ 
+ 
+app.controller("headerController",function($scope, $http, channelServices){
 	$scope.modalOpen = false;
 	$scope.channelsData = [];
-	var res = $http.get("http://localhost:3000/getchannels?showtype=header");
 	
-	res.success(function(data, status, headers, config) {
-		if(!data.error) {
-			$scope.channelsData = data;
+	channelServices.getChannels().then(function(result) {
+		if(!result.error) {
+			$scope.channelsData = result.data;
 		}
 	});
-	
 	
 	$scope.searchContent = function(){
 		$scope.modalOpen = !$scope.modalOpen;
