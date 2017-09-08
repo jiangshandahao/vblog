@@ -1,11 +1,11 @@
 <%- include header %>
 <script type="text/javascript">
 
-	var article = JSON.stringify('<%- article %>'); 
-	console.log(article);
+	var article = <%- JSON.stringify(article)%>; 
+	
 	var user = "";
 	if('<%=user%>'){
-		var user = JSON.parse('<%- JSON.stringify(user)%>');
+		var user = <%- JSON.stringify(user)%>;
 	}
 	
 </script>

@@ -38,7 +38,6 @@ exports.saveArticle = function(req, res){
 			main_picture: "http://resources.vcaomao.com/images/200920899717.jpg",
 			keywords: keywords,
 			mychannel: mychannel,
-//			comments: [],
 			agood: [],
 			amark: [],
 			status: status 
@@ -313,6 +312,7 @@ exports.getChannelArticles = function(req, res){
 	ArticleModel.find({
 			mychannel: channel
 		})
+		.sort({"adate": -1})
 		.exec(function(err, articles) {
 			if(err) {
 				req.flash('error', "获取文章失败");
