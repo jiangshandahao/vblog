@@ -16,6 +16,14 @@
 		   <textarea name = "abrief" id = "abrief"  class = "abrief" ng-model = "nowarticle.abrief" ></textarea>
 	  </div>
 	  <div class="tg-tabs-group">
+	  	<span class="article-tip">图片封面： </span>
+	  	<input type="button" value="选择图片" class="radius-btn" />
+	 	<a class = "cover-image">
+	 		<span class = "cover-mask">删除</span>
+	 		<img src = "/images/072343640414.jpg"/>
+	 	</a>
+	  </div>
+	  <div class="tg-tabs-group">
 	  	  <span class = "article-tip">文章分类：</span> 
 		  <select nowarticle-attr = "nowarticle" ng-model="nowarticle.mychannel" ng-options="channel.name as channel.name group by channel.group for channel in Channels" name = "channel"></select>
 	  </div>
@@ -27,6 +35,7 @@
 	  	 <input type="text"  name = "tag4"  class = "tag" ng-model = "nowarticle.keywords[3]"/>
 	  	  
 	  </div>
+	 
 	  <div class="tg-btn-group">
 		  <input type="button" value="发布文章" class="btn-publish" onclick="submitFun(2);" ng-if = "nowarticle._id"/>
 		  <input type="button" value="保存草稿" class="btn-caogao" onclick="submitFun(1);" />

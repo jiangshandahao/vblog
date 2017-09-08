@@ -1696,3 +1696,39 @@ label {
     line-height: 33px;
 }
 
+.radius-btn{
+	background-color: #fff;
+	border-width: 1px;
+	border-style: solid;
+    border-color: #e7e7eb;
+    color: #222;
+   
+    width: auto;
+    padding:8px 26px;
+    border-radius: 5px; 
+}
+.cover-image{
+	display: block;
+	width:220px;
+	height:124px;
+	margin-left:86px;
+	margin-top: 20px;
+	position: relative;
+}
+
+.cover-mask{
+	display: none;
+	width:220px;
+	height:124px;
+	text-align: center;
+	background: rgba(0,0,0,0.6);
+	position: absolute;
+	top:0;
+	left:0;
+	z-index: 99;
+	color:#ddd;
+	line-height: 124px;
+}
+.cover-image:hover .cover-mask{
+	display: block;
+}
