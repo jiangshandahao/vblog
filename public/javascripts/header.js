@@ -6,7 +6,7 @@ function checkinput(){
 	}
         return true;
 }
-var app = angular.module("rootModule",['ui.router']);
+var app = angular.module("rootModule",['ui.router','angularFileUpload']);
 
 app.filter("toTimeDiff",function(){
         return function(inputTime){

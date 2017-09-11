@@ -38,6 +38,7 @@ $().ready(function() {
       }
     }
   });
+ 
 });
 
 app.controller("EditController",function($scope, $http){
@@ -76,13 +77,71 @@ app.controller("EditController",function($scope, $http){
 		console.log("获取文章列表失败");
 	});	
 	
-	console.log($scope.channelsData);
-	
 	$scope.Channels = [{ id: 1, name: '互联网资讯', group: '文章分类' }, { id: 2, name: '干货分享', group: '文章分类' }, { id: 3, name: '码农进阶',group:'文章分类' }];
 	
 	
 });
 
+app.controller('ImgController', ['$scope', 'FileUploader', function($scope, FileUploader) {
+	var uploader = $scope.uploader = new FileUploader({
+		url: 'http://localhost:3000/uploadimg?action=uploadimage'
+	});
+	$scope.progresson = false;
+	$scope.uploadok = false;
+	// FILTERS
+
+	uploader.filters.push({
+		name: 'imageFilter',
+		fn: function(item /*{File|FileLikeObject}*/ , options) {
+			var type = '|' + item.type.slice(item.type.lastIndexOf('/') + 1) + '|';
+			return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+		}
+	});
+
+	// CALLBACKS
+
+	uploader.onWhenAddingFileFailed = function(item /*{File|FileLikeObject}*/ , filter, options) {
+		console.info('onWhenAddingFileFailed', item, filter, options);
+	};
+	uploader.onAfterAddingFile = function(fileItem) {
+		console.info('onAfterAddingFile', fileItem);
+		$scope.progresson = true;
+		fileItem.upload();
+
+	};
+	uploader.onAfterAddingAll = function(addedFileItems) {
+		console.info('onAfterAddingAll', addedFileItems);
+	};
+	uploader.onBeforeUploadItem = function(item) {
+		console.info('onBeforeUploadItem', item);
+	};
+	uploader.onProgressItem = function(fileItem, progress) {
+		console.info('onProgressItem', fileItem, progress);
+	};
+	uploader.onProgressAll = function(progress) {
+		console.info('onProgressAll', progress);
+	};
+	uploader.onSuccessItem = function(fileItem, response, status, headers) {
+		console.info('onSuccessItem', fileItem, response, status, headers);
+		$scope.cover_src = response.url;
+		$scope.progresson = false;	
+		$scope.uploadok = true;
+	};
+	uploader.onErrorItem = function(fileItem, response, status, headers) {
+		console.info('onErrorItem', fileItem, response, status, headers);
+	};
+	uploader.onCancelItem = function(fileItem, response, status, headers) {
+		console.info('onCancelItem', fileItem, response, status, headers);
+	};
+	uploader.onCompleteItem = function(fileItem, response, status, headers) {
+		console.info('onCompleteItem', fileItem, response, status, headers);
+	};
+	uploader.onCompleteAll = function() {
+		console.info('onCompleteAll');
+	};
+
+	console.info('uploader', uploader);
+}]);
 
 app.directive("drafts", function() {
 	return {

@@ -1,0 +1,41 @@
+<%- include header %>
+
+<div id = "nav2" style="background:#f5f5f5;"></div>
+
+<div  style="background:#f5f5f5; overflow:hidden;min-width:1170px;">
+
+<div class = "container" ng-controller = "EditController" ng-init = "completed = false" >
+<div class = "pull-left" style="background:white; margin-bottom: 20px; position: relative; ">
+		
+	<form method="post" id = "articleForm" name = "articleForm"  action = "/post">
+	  
+	  <div class="tg-tabs-group">
+	  	<span class="article-tip">图片封面： </span>
+	  	<input type="button" value="选择图片" class="radius-btn" />
+	 	<a class = "cover-image">
+	 		<span class = "cover-mask">删除</span>
+	 		<img src = "/images/072343640414.jpg"/>
+	 	</a>
+	  </div>
+	 
+	</form>
+	
+	<form  method="POST" enctype="multipart/form-data" action="http://localhost:3000/uploadimg?action=uploadimage" >
+		<input type="file" accept="image/*" name="upfile" style="position:absolute;clip:rect(0 0 0 0);" >
+		<input type="submit" />
+	</form>
+
+	</div>
+</div>
+
+
+</div>
+</div>
+ 
+<script type="text/javascript" charset="utf-8" src="/plugins/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/plugins/ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="/plugins/ueditor/lang/zh-cn/zh-cn.js"></script>
+
+<script src = "/javascripts/post.js"></script>
+
+<%- include footer %>

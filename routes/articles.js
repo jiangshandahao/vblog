@@ -14,6 +14,15 @@ app.get('/post',function(req,res){
 		error: req.flash('error').toString()
 	});
 });
+app.get('/pos',checkLogin);
+app.get('/pos',function(req,res){
+	res.render('pos', {
+		title: '微草帽－写文章',
+		user: req.session.user,
+		success: req.flash('success').toString(),
+		error: req.flash('error').toString()
+	});
+});
 //保存草稿、发布文章
 app.post('/post',checkLogin);
 app.post('/post',ArticleController.saveArticle);

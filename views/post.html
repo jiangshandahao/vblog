@@ -7,7 +7,7 @@
 <div class = "container" ng-controller = "EditController" ng-init = "completed = false" >
 <div class = "pull-left" style="background:white; margin-bottom: 20px; position: relative; ">
 		
-	<form method="post" id = "articleForm" name = "articleForm"  action = "/post">
+	<form method="post" id = "articleForm" name = "articleForm">
 	  <input type="text" name="title" id = "post-title" placeholder = "请输入标题,1-30个字" value="" ng-model = "nowarticle.atitle" />
 	  <input type="hidden" name="post_id" ng-model = "nowarticle._id" value = "{{nowarticle._id}}" />
 	  <script id="editor" type="text/plain" style="width:715px;height:600px;"></script>
@@ -15,12 +15,19 @@
 	  	   <span class = "article-tip">文章摘要： </span> 
 		   <textarea name = "abrief" id = "abrief"  class = "abrief" ng-model = "nowarticle.abrief" ></textarea>
 	  </div>
-	  <div class="tg-tabs-group">
+	  <div class="tg-tabs-group" ng-controller="ImgController" uploader="uploader" filters="queueLimit, customFilter" >
+	  
 	  	<span class="article-tip">图片封面： </span>
-	  	<input type="button" value="选择图片" class="radius-btn" />
-	 	<a class = "cover-image">
+	  	
+	  	<label class="radius-btn" for="xFile">选择图片</label><span style = "color:#666;margin-left:20px;">建议尺寸：750px*450px</span>
+	  	<input type="file" accept="image/*" id="xFile" nv-file-select="" uploader="uploader" style="position:absolute;clip:rect(0 0 0 0);" />
+	  	<div class="progress" style="height: 4px; margin-top:10px;margin-bottom:0px; width:220px; margin-left: 86px;border-radius: 0;" ng-show = "progresson">
+	  		<div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+	  	</div>
+
+	 	<a class = "cover-image" ng-show = "uploadok" >
 	 		<span class = "cover-mask">删除</span>
-	 		<img src = "/images/072343640414.jpg"/>
+	 		<img ng-src = "{{cover_src}}"/>
 	 	</a>
 	  </div>
 	  <div class="tg-tabs-group">
