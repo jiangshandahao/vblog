@@ -4,6 +4,7 @@ var articles = require("./articles");
 var user_info = require("./user_info");
 var Geetest = require('../lib/gt-sdk');
 var ueditor = require("../lib/ueditor");
+var uploadimg = require("../lib/uploadimg");
 
 var ChannelController = require('../controllers/channel_controller.js');
 
@@ -23,6 +24,7 @@ app.get('/', function(req, res, next) {
 
 
 app.get('/getchannels', ChannelController.getChannelsByShowType);
+app.get('/newchannels', ChannelController.newChannel);
 
 // pc 端接口
 
@@ -98,9 +100,7 @@ app.use("/ueditor/ue", ueditor(path.join(__dirname, 'public'), {
   if(req.query.action === 'uploadimage'){
     var foo = req.ueditor;
 
-    var imgname = req.ueditor.filename;
-
-    
+    var imgname = req.ueditor.filename;    
     res.ue_up(imgDir); //你只要输入要保存的地址 。保存操作交给ueditor来做
   }
   //  客户端发起图片列表请求
@@ -114,6 +114,23 @@ app.use("/ueditor/ue", ueditor(path.join(__dirname, 'public'), {
     res.setHeader('Content-Type', 'application/json');
     res.redirect('/plugins/ueditor/ueditor.config.json');
 }}));
+
+app.use("/uploadimg", uploadimg(path.join(__dirname, 'public'), {
+    qn: {
+    		accessKey: 'P-TttbGVOwlhnfNzDe4IHavjVk21lDGwnkWM8mE6',
+    		secretKey: 'qAo9JTyYXHaI5g2PT88KEbcPpRYWg44CGDSerazR',
+    		bucket: 'vcaomao-users',
+    		origin: 'http://users.vcaomao.com'
+    }
+}, function(req, res, next) {
+  // ueditor 客户发起上传图片请求
+  var imgDir = '/img/ueditor/'
+  if(req.query.action === 'uploadimage'){
+    res.ue_up(imgDir); //你只要输入要保存的地址 。保存操作交给ueditor来做
+  }
+  
+}));
+
 
 
 users(app);

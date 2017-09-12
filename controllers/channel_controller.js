@@ -26,6 +26,7 @@ exports.getChannelsByShowType = function(req, res){
 exports.newChannel = function(req, res){
 	var channelModel = new ChannelModel({
 		channel_name: "八卦互联网",
+		group:'文章分类',
 		show_type: "header"
 	});
 	channelModel.save(function(err, channel) {

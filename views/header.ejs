@@ -57,6 +57,14 @@
       </ul>
   </div>
 </div>
+<script type="text/javascript">
+	
+	var user = "";
+	if('<%=user%>') {
+		var user = <%- JSON.stringify(user)%>;
+	}
+</script>
 <script src="/lib/angular.min.js"></script> 
 <script src="/lib/angular-ui-router.min.js"></script>
+<script src="/lib/angular-file-upload.min.js"></script>
 <script src="/javascripts/header.js"></script> 

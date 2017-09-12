@@ -9,6 +9,16 @@
 <div class="mod-b" ng-repeat = "myarticle in myarticles track by $index">
 	<!--栏目链接-->
 	<a href="http://localhost:3000/getchannelarticles?channel={{myarticle.mychannel}}" class="column-link" target="_blank">{{myarticle.mychannel}}</a>
+	<div class="dropdown " ng-if="is_now_user">
+		<button class="btn btn-default article-handler" data-toggle="dropdown" type="button">
+		    		     <span class="caret"></span>
+		    		</button>
+		<ul class="dropdown-menu">
+			<!--所有人-->
+			<li class="pl-report" ng-if="edit"><a href = "/edit">编辑</a></li>
+			<li class="pl-report">删除</li>
+		</ul>
+	</div>
 	<div class="mod-thumb">
 		<a class="transition" href="/article/{{myarticle._id}}" target="_blank">
 			<img style="display: inline;" src="{{myarticle.main_picture}}" alt="{{myarticle.atitle}}">

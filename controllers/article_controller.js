@@ -3,8 +3,7 @@ var mongoose = require('mongoose'),
 	ObjectID = require('mongodb').ObjectID,
     ArticleModel = mongoose.model('ArticleModel');
 
-//新建或更新保存草稿
-exports.saveArticle = function(req, res){
+function beforeArticleSave(req){
 	//把关键字组合成数组
 	var keywords = new Array();
 	keywords[0] = req.body.tag1;
@@ -14,13 +13,12 @@ exports.saveArticle = function(req, res){
 	//文章内容
 	var content = req.body.editorValue == undefined ? "<p></p>" : req.body.editorValue;
 	//文章频道
-	var mychannel  = (new RegExp("^string:").test(req.body.channel) == true) ?  req.body.channel.substr(7) : "";
+	var mychannel = (new RegExp("^string:").test(req.body.channel) == true) ? req.body.channel.substr(7) : "";
 	//文章状态
 	var status = Number(req.body.status);
-//	console.log(req.body);
-	//当文章_id 不存在时， 新建文章
-	if(!req.body.post_id){
-		var articleModel = new ArticleModel({
+	
+	return {
+		create: {
 			author_id: req.session.user._id,
 			author_info: {
 				username: req.session.user.username,
@@ -35,13 +33,34 @@ exports.saveArticle = function(req, res){
 			modified_date: new Date(),
 			abrief: req.body.abrief,
 			content: content,
-			main_picture: "http://resources.vcaomao.com/images/200920899717.jpg",
+			main_picture: req.body.picture_url,
 			keywords: keywords,
 			mychannel: mychannel,
 			agood: [],
 			amark: [],
+			status: status
+		},
+		update:{
+			atitle: req.body.title,
+			adate: new Date(),
+			modified_date: new Date(),
+			abrief: req.body.abrief,
+			content: content,
+			main_picture: req.body.picture_url,
+			keywords: keywords,
+			mychannel: mychannel,
 			status: status 
-		});
+		}
+	};
+};
+
+//新建或更新保存草稿
+exports.saveArticle = function(req, res){
+	
+	//当文章_id 不存在时， 新建文章
+	if(!req.body.post_id){
+		var okArticle = beforeArticleSave(req).create;
+		var articleModel = new ArticleModel(okArticle);
 		
 		articleModel.save(function(err, user) {
 			if(err) {
@@ -55,16 +74,7 @@ exports.saveArticle = function(req, res){
 		
 	}else{
 		//当文章已经存在时， 更新
-		var updateArticleInfo = {
-			atitle: req.body.title,
-			adate: new Date(),
-			modified_date: new Date(),
-			abrief: req.body.abrief,
-			content: content,
-			main_picture: "http://resources.vcaomao.com/images/200920899717.jpg",									keywords: keywords,
-			mychannel: mychannel,
-			status: status 
-		};
+		var updateArticleInfo = beforeArticleSave(req).update;
 		ArticleModel.findOne({"_id": new ObjectID(req.body.post_id)})
 		.exec(function(err, article) {
 			if(err) {
@@ -80,12 +90,12 @@ exports.saveArticle = function(req, res){
 						res.redirect('/post');
 					}else{
 						//console.log(updatedArticle);//{ n: 1, nModified: 1, ok: 1 }	
-						if(status == 1)//草稿更新
+						if(updateArticleInfo.status == 1)//草稿更新
 						{
 							req.flash('success', '更新草稿成功');
 							res.redirect('/post');
 						}
-						else if(status == 2){ //发布提交审核
+						else if(updateArticleInfo.status == 2){ //发布提交审核
 							req.flash('success', '发布成功，文章已经提交审核');
 							res.redirect('/');
 						}

@@ -40,7 +40,8 @@
         ],[
             'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript',  'blockquote',  '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist',
             'paragraph', 'fontfamily', 'fontsize','|',
-            'link', 'unlink', 'simpleupload'
+            'link', 'unlink', 'simpleupload','insertimage',
+            'insertvideo'
         ]]
         //当鼠标放在工具栏上时显示的tooltip提示,留空支持自动多语言配置，否则以配置值为准
         //,labelMap:{
