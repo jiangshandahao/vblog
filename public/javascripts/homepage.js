@@ -128,6 +128,8 @@ app.config(function($stateProvider, $urlRouterProvider){
 		templateUrl:"../template/myarticle.html",
 		controller:function($scope,$http){
 			$scope.page_title = "文章列表";
+			$scope.is_now_user = is_now_user;
+			$scope.edit = false;
 			var res = $http.get("http://localhost:3000/getarticles?type=drafts&requid="+$scope.requid);
 			res.success(function(data, status, headers, config) {
 				$scope.completed = true;
@@ -143,6 +145,9 @@ app.config(function($stateProvider, $urlRouterProvider){
 		templateUrl:"../template/myarticle.html",
 		controller:function($scope,$http){
 			$scope.page_title = "草稿箱";
+			$scope.is_now_user = is_now_user;
+			$scope.edit = true;
+			$scope.is_now_user = is_now_user;
 			var res = $http.get("http://localhost:3000/getarticles?type=drafts");
 			res.success(function(data, status, headers, config) {
 				$scope.completed = true;
@@ -158,6 +163,8 @@ app.config(function($stateProvider, $urlRouterProvider){
 		templateUrl:"../template/myarticle.html",
 		controller:function($scope,$http){
 			$scope.page_title = "待审核文章";
+			$scope.is_now_user = is_now_user;
+			$scope.edit = false;
 			var res = $http.get("http://localhost:3000/getarticles?type=checking");
 			res.success(function(data, status, headers, config) {
 				$scope.completed = true;

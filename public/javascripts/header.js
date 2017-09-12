@@ -62,6 +62,7 @@ app.controller("headerController",function($scope, $http, channelServices){
 	channelServices.getChannels().then(function(result) {
 		if(!result.error) {
 			$scope.channelsData = result.data;
+			$scope.$broadcast('transfer.channels', result.data);  
 		}
 	});
 	

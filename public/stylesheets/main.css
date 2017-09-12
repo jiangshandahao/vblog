@@ -1528,10 +1528,10 @@ label {
 	color:red;
 	margin-top: 10px;
 }
-.pl-box-wrap .dropdown-menu {
+.pl-box-wrap .dropdown-menu, .mod-b .dropdown-menu {
     border: none;
     box-shadow: 0 0 15px rgba(18,21,21,.2);
-    margin: 10px 0 0 0;
+    margin: 10px 1px 0 0;
     text-align: center;
     width: 120px;
     min-width: 10px;
@@ -1541,25 +1541,28 @@ label {
     left: auto;
     top:24px;
 }
-.pl-box-wrap .dropdown-menu li {
+
+.pl-box-wrap .dropdown-menu li, .mod-b .dropdown-menu li {
     color: #bbb;
     font-size: 16px;
     margin: 8px 0;
     cursor: pointer;
 }
-.pl-box-wrap .dropdown-menu li:hover {
+.pl-box-wrap .dropdown-menu li:hover, .mod-b .dropdown-menu li:hover{
     color: #333;
 }
-.delete-comment{
+.delete-comment,.article-handler{
 	float:right;
 	border-radius: 0;
 	color: #3ca5f6;
+	border-color: transparent;
 	
 }
-.delete-comment:hover,.delete-comment:focus{
+.delete-comment:hover,.delete-comment:focus,.article-handler:hover,.article-handler:focus{
 	color: #fff;
 	background-color: #3ca5f6;
 	border-color: #3ca5f6;
+	outline: none;
 }
 .praise-box.center-box {
     margin: 0 auto;

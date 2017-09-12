@@ -24,6 +24,7 @@ app.get('/', function(req, res, next) {
 
 
 app.get('/getchannels', ChannelController.getChannelsByShowType);
+app.get('/newchannels', ChannelController.newChannel);
 
 // pc 端接口
 
@@ -99,9 +100,7 @@ app.use("/ueditor/ue", ueditor(path.join(__dirname, 'public'), {
   if(req.query.action === 'uploadimage'){
     var foo = req.ueditor;
 
-    var imgname = req.ueditor.filename;
-
-    
+    var imgname = req.ueditor.filename;    
     res.ue_up(imgDir); //你只要输入要保存的地址 。保存操作交给ueditor来做
   }
   //  客户端发起图片列表请求

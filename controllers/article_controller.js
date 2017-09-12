@@ -33,7 +33,7 @@ function beforeArticleSave(req){
 			modified_date: new Date(),
 			abrief: req.body.abrief,
 			content: content,
-			main_picture: "http://resources.vcaomao.com/images/200920899717.jpg",
+			main_picture: req.body.picture_url,
 			keywords: keywords,
 			mychannel: mychannel,
 			agood: [],
@@ -46,7 +46,8 @@ function beforeArticleSave(req){
 			modified_date: new Date(),
 			abrief: req.body.abrief,
 			content: content,
-			main_picture: "http://resources.vcaomao.com/images/200920899717.jpg",									keywords: keywords,
+			main_picture: req.body.picture_url,
+			keywords: keywords,
 			mychannel: mychannel,
 			status: status 
 		}
@@ -56,7 +57,6 @@ function beforeArticleSave(req){
 //新建或更新保存草稿
 exports.saveArticle = function(req, res){
 	
-	//console.log(req.body);
 	//当文章_id 不存在时， 新建文章
 	if(!req.body.post_id){
 		var okArticle = beforeArticleSave(req).create;
