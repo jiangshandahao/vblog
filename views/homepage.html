@@ -5,6 +5,8 @@
  	var req_user = <%- JSON.stringify(req_user)%>;
 	
 </script>
+<script src = "/lib/bootstrap.min.js"></script>
+
 <div id = "nav2"></div>
 <div class = "container" ng-controller = "homeController" ng-init = "requid = '<%=req_user._id%>' ; completed = false">
 	
@@ -32,9 +34,9 @@
 				<li>
 					<a ui-sref="goods">点赞的文章</a>
 				</li>
-				<li><a href="">我的关注</a></li>
+				<li><a ui-sref="idols">我的关注</a></li>
 				<li>
-					<a href="">我的粉丝</a>
+					<a ui-sref="followers">我的粉丝</a>
 				</li>
 				<li><a ui-sref = "myarticle">发布的文章</a></li>
 				<li><a ui-sref ="mydrafts">草稿箱</a></li>

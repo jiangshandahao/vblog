@@ -24,6 +24,15 @@ app.factory('homeService', ['$http', function($http) {
 				}
 			});
 			return res;
+		},
+		getUserInfo:function(){
+			var res = $http.get("http://localhost:3000/getuserinfo");
+			res.success(function(data, status, headers, config) {
+				if(!data.error) {
+					return data;
+				}
+			});
+			return res;
 		}
 	};
 	return factoryDefinitions;
@@ -214,7 +223,7 @@ app.config(function($stateProvider, $urlRouterProvider){
 			$scope.is_now_user = is_now_user;
 			$scope.status = 3;
 			
-			homeService.getArticles("articles",$scope.requid).then(function(result) {
+			homeService.getArticles("drafts",$scope.requid).then(function(result) {
 				$scope.completed = true;
 				$scope.myarticles = result.data;
 			});
@@ -307,6 +316,44 @@ app.config(function($stateProvider, $urlRouterProvider){
 				$scope.myarticles = data;
 			}).error(function(data, status, headers, config) {
 				console.log("获取文章列表失败");
+			});
+		}
+	});
+	
+	$stateProvider.state("idols", {
+		url: "/idols",
+		templateUrl: "../template/friends.html",
+		controller: function($scope, $http, homeService) {
+			$scope.page_title = "我的关注";
+			homeService.getUserInfo().then(function(result) {
+				$scope.completed = true;
+				result.data.idols.forEach(function(v){//遍历每一个关注了的用户对象
+					var fOrNot = result.data.followers.some(function(follower){
+						return follower._id === v._id;
+					});
+					v.statusText = fOrNot ? '互相关注': '已关注';
+				});
+				$scope.myfriends = result.data.idols;
+
+				
+			});
+		}
+	});
+	
+	$stateProvider.state("followers", {
+		url: "/followers",
+		templateUrl: "../template/friends.html",
+		controller: function($scope, $http, homeService) {
+			$scope.page_title = "我的粉丝";
+			homeService.getUserInfo().then(function(result) {
+				$scope.completed = true;
+				result.data.followers.forEach(function(v) { //遍历每一个关注了的用户对象
+					var fOrNot = result.data.idols.some(function(idol) {
+						return idol._id === v._id;
+					});
+					v.statusText = fOrNot ? '互相关注' : '被关注';
+				});
+				$scope.myfriends = result.data.followers;
 			});
 		}
 	});

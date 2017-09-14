@@ -1,0 +1,24 @@
+<div>
+<h2>{{page_title}}</h2>
+
+<div style = "padding: 16px; text-align: center;" ng-if = "!completed"><img src = "../images/loading.gif" /></div>
+
+<div ng-if = "completed" >
+<p class = "zanwu" ng-if = "!myfriends.length">暂无朋友</p>
+
+<div class="friend-box" ng-repeat = "myfriend in myfriends track by $index">	
+	<!--栏目链接-->
+	<span class="column-link-friend" target="_blank">{{myfriend.statusText}}</span>
+	<div class="mod-friend">
+		<a class="transition" href="/u/{{myfriend.username}}" target="_blank">
+			<img style="display: inline;" src="{{myfriend.avatar}}" alt="{{myfriend.username}}">
+		</a>
+	</div>
+	<div class="mob-friendinfo">
+		<h3><a href="/u/{{myfriend.username}}" target="_blank">{{myfriend.username}}</a></h3>
+		<div class="mob-sub">{{myfriend.signature}}</div>
+	</div>
+</div>  
+</div>
+
+</div>
