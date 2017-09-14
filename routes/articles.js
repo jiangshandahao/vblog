@@ -21,14 +21,14 @@ app.post('/post',ArticleController.saveArticle);
 
 //发布文章页
 app.get('/edit',checkLogin);
-app.get('/edit',function(req,res){
-	res.render('edit', {
-		title: '微草帽－编辑文章',
-		user: req.session.user,
-		success: req.flash('success').toString(),
-		error: req.flash('error').toString()
-	});
-});
+app.get('/edit',ArticleController.editArticle);
+//保存草稿、发布文章
+app.post('/edit',checkLogin);
+app.post('/edit',ArticleController.saveArticle);
+
+//更改文章状态
+app.post('/update_article', checkLogin);
+app.post('/update_article', ArticleController.updateArticleStatus);
 
 //一个获取文章列表的接口API，可以用于angular中的HTTP请求
 app.get('/getarticles',ArticleController.getUserAritcles);
@@ -54,6 +54,7 @@ app.post('/newcomment',CommentController.newComment);
 app.get('/getcomment',CommentController.getCommentsByPid);
 //删除评论
 app.post('/deletecomment',CommentController.deleteCommentHandler);
+
 //点赞评论
 app.post('/goodcomment',CommentController.goodCommentHandler);
 //倒踩评论

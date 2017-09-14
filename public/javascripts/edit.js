@@ -41,54 +41,27 @@ $().ready(function() {
  
 });
 
-app.controller("EditController",function($scope, $http){
-	$scope.user = user; 
-	var res = $http.get("http://localhost:3000/getarticles?type=drafts");
-	res.success(function(data, status, headers, config) {
-		$scope.drafts = data;
-		$scope.completed = true;
-		if(data.length == 0){
-			var newArticle = {
-				atitle: '无文章标题',
-				abrief: '无文章摘要',
-				content: '<p></p>',
-				main_picture:'',
-				keywords: ['', '', '', ''],
-				mychannel: '',
-				modified_date: new Date()
-			};
-			$scope.drafts.unshift(newArticle);	
-		}
-		//设置初始状态
-		$scope.drafts[0].active = "active";
-		$scope.nowarticle = {
-			_id:$scope.drafts[0]._id,
-			atitle: $scope.drafts[0].atitle,
-			main_picture: $scope.drafts[0].main_picture,
-			mychannel: $scope.drafts[0].mychannel,
-			abrief: $scope.drafts[0].abrief,
-			keywords: $scope.drafts[0].keywords
-		};
-		//向子级广播transfer.picture主图地址改变事件
-		 $scope.$broadcast('transfer.picture', $scope.drafts[0].main_picture);   
-
-		//当UEditor组件渲染好了之后（直接赋值会导致找不到组件）， 设置初始值
-		ue.addListener('ready', function(e) {
-			ue.setContent($scope.drafts[0].content);
-		}); //加选择改变事件监听
-		
-	}).error(function(data, status, headers, config) {
-		console.log("获取文章列表失败");
-	});	
+app.controller("EditController",function($scope, $http, $timeout){
+	$scope.nowarticle = now_article;
+	
+	//当UEditor组件渲染好了之后（直接赋值会导致找不到组件）， 设置初始值
+	ue.addListener('ready', function(e) {
+		ue.setContent($scope.nowarticle.content);
+	}); //加选择改变事件监听
+	
+	
 	//接收父级传来的transfer.channels 频道信息
 	$scope.$on('transfer.channels', function(event, data) {
 		$scope.Channels = data;
 	});
-
+	
 	//接收子级传来的transfer.picture主图地址改变事件
 	$scope.$on('transfer.picurl', function(event, data) {
 		$scope.$broadcast('transfer.picture', data);
-		
+	});
+	$timeout(function() {
+		//向子级广播transfer.picture主图地址改变事件
+		$scope.$broadcast('transfer.picture', now_article.main_picture);
 	});
 });
 
@@ -99,6 +72,7 @@ app.controller('ImgController', ['$scope', 'FileUploader', function($scope, File
 	$scope.progresson = false;
 	//接收父级传来的transfer.picture主图地址改变事件
 	$scope.$on('transfer.picture', function(event, data) {
+		console.log(data);
 		$scope.main_picture = data;
 	});
 	
@@ -160,60 +134,3 @@ app.controller('ImgController', ['$scope', 'FileUploader', function($scope, File
 	console.info('uploader', uploader);
 }]);
 
-app.directive("drafts", function() {
-	return {
-		restrict: 'AEC',
-		replace: true,
-		templateUrl: '../template/drafts.html',
-		scope:{
-			completed: '=completedAttr',
-			drafts:'=draftsAttr',
-			nowarticle:'=nowarticleAttr',
-			userData:'=userAttr',
-		},
-		//scope: true,//父元素继承也无法实现双向绑定
-		link: function(scope, elem, attrs) {
-			scope.selectItem =  function(index){
-//				console.log(scope.nowarticle);
-				angular.forEach(scope.drafts, function(v) {
-					v.active = '';
-				});
-				scope.nowarticle = {
-					_id: scope.drafts[index]._id,
-					atitle:scope.drafts[index].atitle,
-					main_picture:scope.drafts[index].main_picture,
-					mychannel:scope.drafts[index].mychannel,
-					abrief: scope.drafts[index].abrief,
-					keywords: scope.drafts[index].keywords
-				};
-				//向父级发布transfer.picurl主图地址改变事件
-				scope.$emit('transfer.picurl', scope.drafts[index].main_picture);
-				scope.drafts[index].active = "active";
-				ue.setContent(scope.drafts[index].content) ;
-			};
-			
-			scope.selectDraft = function(index){
-				scope.selectItem(index);
-			};
-			scope.newDraft = function(){
-				
-				var newArticle = {
-					atitle:'无文章标题',
-					abrief:'无文章摘要',
-					content:'<p></p>',
-					main_picture:'',
-					keywords: ['','','',''],
-					mychannel: '',
-					modified_date: new Date()
-				};
-				 
-				scope.drafts.unshift(newArticle);
-				//向父级发布transfer.picurl主图地址改变事件
-				scope.$emit('transfer.picurl', scope.drafts[0].main_picture);
-				
-				scope.selectItem(0);
-			};
-			
-		}
-	}
-});

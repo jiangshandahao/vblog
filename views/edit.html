@@ -1,5 +1,9 @@
 <%- include header %>
+<script type="text/javascript">
 
+	var now_article = <%- JSON.stringify(now_article)%>; 
+	
+</script>
 <div id = "nav2" style="background:#f5f5f5;"></div>
 
 <div  style="background:#f5f5f5; overflow:hidden;min-width:1170px;">
@@ -54,7 +58,7 @@
 </div>
 
 <div class="pull-right" >
-	<drafts user-attr = "user" drafts-attr = "drafts" nowarticle-attr = "nowarticle" completed-attr = "completed"></drafts>
+	
 </div>
 </div>
 </div>
@@ -63,6 +67,6 @@
 <script type="text/javascript" charset="utf-8" src="/plugins/ueditor/ueditor.all.min.js"> </script>
 <script type="text/javascript" charset="utf-8" src="/plugins/ueditor/lang/zh-cn/zh-cn.js"></script>
 
-<script src = "/javascripts/post.js"></script>
+<script src = "/javascripts/edit.js"></script>
 
 <%- include footer %>

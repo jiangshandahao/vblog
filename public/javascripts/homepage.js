@@ -1,5 +1,35 @@
+//获取频道服务
+app.factory('homeService', ['$http', function($http) {
+	var factoryDefinitions = {
+		getArticles: function(type, requid) {
+			if(requid){
+				var url = "http://localhost:3000/getarticles?type=" + type + "&requid=" + requid;
+			}else{
+				var url = "http://localhost:3000/getarticles?type=" + type ;
+			}
+			var res = $http.get(url);
+			res.success(function(data, status, headers, config) {
+				if(!data.error) {
+					return data;
+				}
+			});
+			return res;
+		},
+		handleArticles: function(type, pid) {
+			var url = "http://localhost:3000/update_article?type="+type+"&pid=" + pid ;		
+			var res = $http.post(url);
+			res.success(function(data, status, headers, config) {
+				if(!data.error) {
+					return data;
+				}
+			});
+			return res;
+		}
+	};
+	return factoryDefinitions;
+}]);
 
-app.controller("homeController",function($scope, $http, $timeout){
+app.controller("homeController",function($scope, $http, $timeout, homeService, $uibModal, $log){
 	$scope.follow_state_text = "关注";
 	$scope.follow_state = 1;
 	if(user && !is_now_user ){//如果是访问他人的主页
@@ -39,7 +69,6 @@ app.controller("homeController",function($scope, $http, $timeout){
 		});
 		
 	}
-
 
 	$scope.alertInfo = {
 		type: 'success',
@@ -117,8 +146,62 @@ app.controller("homeController",function($scope, $http, $timeout){
 			$scope.alertInfo.showInfo("error", "此操作需要登录");
 		}
 	};
-});
+	
+	$scope.open = function() {
+		var modalInstance = $uibModal.open({
+			animation: 'true',
+			templateUrl: 'myModalContent.html',
+			controller: 'ModalInstanceController',
+			resolve: { //传到模态窗口的对象
+				text: function(){
+					return $scope.text;
+				}
+			}
+		});
+		modalInstance.result.then(function() {
+			homeService.handleArticles($scope.type,$scope.pid).then(function(result) {
+				if(result.data.success) {
+					$scope.alertInfo.showInfo("success", $scope.text + "文章成功");
+				} else {
+					$scope.alertInfo.showInfo("error", $scope.text + "文章失败");
+				}
+			});
 
+		}, function() {
+			$log.info('Modal dismissed at: ' + new Date());
+		});
+	};
+	
+	$scope.handleArticles = function(type, pid) {
+		$scope.pid = pid;
+		$scope.type = type;
+		switch(type) {
+			case 'delete':
+				$scope.text = "删除";
+				break;
+			case 'regret':
+				$scope.text = "还原";
+				break;
+			case 'trashdelete':
+				$scope.text = "彻底删除";
+				break;
+			default:
+				$scope.text = "操作";
+				break;
+		}
+		$scope.open();
+	};
+
+});
+app.controller('ModalInstanceController', function($scope, $uibModalInstance, text) {
+	$scope.text = text;
+	$scope.ok = function() {
+		$uibModalInstance.close();
+	};
+	$scope.cancel = function() {
+		$uibModalInstance.dismiss('cancel');
+	};
+});
 //开始配置单页路由
 app.config(function($stateProvider, $urlRouterProvider){
 	$urlRouterProvider.otherwise('/myarticle');
@@ -126,16 +209,14 @@ app.config(function($stateProvider, $urlRouterProvider){
 	$stateProvider.state("myarticle", {
 		url:"/myarticle",
 		templateUrl:"../template/myarticle.html",
-		controller:function($scope,$http){
+		controller:function($scope, $http, homeService){
 			$scope.page_title = "文章列表";
 			$scope.is_now_user = is_now_user;
-			$scope.edit = false;
-			var res = $http.get("http://localhost:3000/getarticles?type=drafts&requid="+$scope.requid);
-			res.success(function(data, status, headers, config) {
+			$scope.status = 3;
+			
+			homeService.getArticles("articles",$scope.requid).then(function(result) {
 				$scope.completed = true;
-				$scope.myarticles = data; 
-			}).error(function(data, status, headers, config) {
-				console.log("获取文章列表失败");
+				$scope.myarticles = result.data;
 			});
 		}
 	});
@@ -143,34 +224,59 @@ app.config(function($stateProvider, $urlRouterProvider){
 	$stateProvider.state("mydrafts", {
 		url:"/mydrafts",
 		templateUrl:"../template/myarticle.html",
-		controller:function($scope,$http){
+		controller:function($scope,$http,homeService){
 			$scope.page_title = "草稿箱";
 			$scope.is_now_user = is_now_user;
-			$scope.edit = true;
-			$scope.is_now_user = is_now_user;
-			var res = $http.get("http://localhost:3000/getarticles?type=drafts");
-			res.success(function(data, status, headers, config) {
+			$scope.status = 1;
+			homeService.getArticles("drafts").then(function(result) {
 				$scope.completed = true;
-				$scope.myarticles = data; 
-			}).error(function(data, status, headers, config) {
-				console.log("获取草稿箱列表失败");
+				$scope.myarticles = result.data;
 			});
+
 		}
 	});
 	
 	$stateProvider.state("mychecking", {
 		url:"/mychecking",
 		templateUrl:"../template/myarticle.html",
-		controller:function($scope,$http){
+		controller:function($scope,$http,homeService){
 			$scope.page_title = "待审核文章";
 			$scope.is_now_user = is_now_user;
-			$scope.edit = false;
-			var res = $http.get("http://localhost:3000/getarticles?type=checking");
-			res.success(function(data, status, headers, config) {
+			$scope.status = 2;
+			
+			homeService.getArticles("checking").then(function(result) {
 				$scope.completed = true;
-				$scope.myarticles = data; 
-			}).error(function(data, status, headers, config) {
-				console.log("获取草稿箱列表失败");
+				$scope.myarticles = result.data;
+			});
+		}
+	});
+	
+	$stateProvider.state("myfail", {
+		url: "/myfail",
+		templateUrl: "../template/myarticle.html",
+		controller: function($scope, $http,homeService) {
+			$scope.page_title = "未通过文章";
+			$scope.is_now_user = is_now_user;
+			$scope.status = 5;
+	
+			homeService.getArticles("fail").then(function(result) {
+				$scope.completed = true;
+				$scope.myarticles = result.data;
+			});
+		}
+	});
+	
+	$stateProvider.state("mytrash", {
+		url:"/mytrash",
+		templateUrl:"../template/myarticle.html",
+		controller:function($scope,$http,homeService){
+			$scope.page_title = "回收站";
+			$scope.is_now_user = is_now_user;
+			$scope.status = 4;
+			
+			homeService.getArticles("trash").then(function(result) {
+				$scope.completed = true;
+				$scope.myarticles = result.data;
 			});
 		}
 	});
@@ -178,7 +284,7 @@ app.config(function($stateProvider, $urlRouterProvider){
 	$stateProvider.state("marks", {
 		url: "/marks",
 		templateUrl: "../template/myarticle.html",
-		controller: function($scope, $http) {
+		controller: function($scope, $http ) {
 			$scope.page_title = "收藏的文章";
 			var res = $http.get("http://localhost:3000/usermarks?requid=" + $scope.requid);
 			res.success(function(data, status, headers, config) {
@@ -194,7 +300,7 @@ app.config(function($stateProvider, $urlRouterProvider){
 		url: "/goods",
 		templateUrl: "../template/myarticle.html",
 		controller: function($scope, $http) {
-			$scope.page_title = "收藏的文章";
+			$scope.page_title = "点赞的文章";
 			var res = $http.get("http://localhost:3000/usergoods?requid=" + $scope.requid);
 			res.success(function(data, status, headers, config) {
 				$scope.completed = true;

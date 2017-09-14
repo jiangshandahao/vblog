@@ -6,7 +6,7 @@ function checkinput(){
 	}
         return true;
 }
-var app = angular.module("rootModule",['ui.router','angularFileUpload']);
+var app = angular.module("rootModule",['ui.router','angularFileUpload','ui.bootstrap']);
 
 app.filter("toTimeDiff",function(){
         return function(inputTime){
@@ -37,8 +37,10 @@ app.filter("toTimeDiff",function(){
 	        	return result;
         };
  });
+
  
- //Factories
+ 
+ //获取频道服务
  app.factory('channelServices', ['$http', function($http) {
  	var factoryDefinitions = {
  		getChannels: function() {

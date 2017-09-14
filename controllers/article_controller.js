@@ -124,7 +124,12 @@ exports.getUserAritcles = function(req, res){
 		case "articles":
 			status = 3; 
 			break; 
-		
+		case "trash":
+			status = 4;
+			break;
+		case "fail":
+			status = 5;
+			break;
 		default:
 			break;
 	}
@@ -148,6 +153,7 @@ exports.getUserAritcles = function(req, res){
 	});
 };
 
+//文章详情页面
 exports.getArticleById = function(req, res){
 	
 	var aid = req.params.articleid;
@@ -174,6 +180,83 @@ exports.getArticleById = function(req, res){
 		}
 		
 	});
+};
+
+//文章编辑页面
+exports.editArticle = function(req, res){
+	var pid = !req.query.pid ? "" : req.query.pid;
+	ArticleModel.findOne({ 
+		_id: new ObjectID(pid)
+	})
+	.exec(function(err, article) {
+		if(err){
+			req.flash('error', "获取文章失败");
+			res.redirect('/');
+		}else {
+			if(article){
+				res.render('edit', {
+					title: '微草帽－编辑文章',
+					user: req.session.user,
+					now_article:article,
+					success: req.flash('success').toString(),
+					error: req.flash('error').toString()
+				});
+			}else{
+				req.flash('error', "获取文章失败");
+				res.redirect('/');
+			}
+		}
+		
+	});
+};
+
+
+//更改文章状态
+exports.updateArticleStatus = function(req, res) {
+	var pid = !req.query.pid ? "" : req.query.pid;
+	var type = !req.query.type ? "" : req.query.type;
+	var status = 0;
+	switch(type) {
+		case 'delete':
+			status = 4;
+			break;
+		case 'regret':
+			status = 1;
+			break;
+		case 'trashdelete':
+			status = 0;
+			break;
+		default:
+			break;
+	}
+	ArticleModel.findOne({
+			"_id": new ObjectID(pid)
+		})
+		.exec(function(err, article) {
+			if(err) {
+				res.send({
+					'error': "还原文章失败"
+				});
+			} else {
+				
+				article.update({
+						$set: {
+							status:status
+						}
+					})
+					.exec(function(err, updatedArticle) {
+						if(err) {
+							res.send({
+								'error': type+"文章失败"
+							});
+						} else {
+							res.send({
+								'success': type+"文章成功"
+							});
+						}
+					});
+			}
+		});
 };
 
 //文章点赞
@@ -321,6 +404,7 @@ exports.getChannelArticles = function(req, res){
 	var channel = !req.query.channel ? "" : req.query.channel;
 	ArticleModel.find({
 			mychannel: channel
+//			status: 3
 		})
 		.sort({"adate": -1})
 		.exec(function(err, articles) {

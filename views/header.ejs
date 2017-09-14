@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="/stylesheets/main.css" />
 <script src = "/lib/jquery-2.1.4.min.js"></script>
 <script src = "/lib/bootstrap.min.js"></script>
-
 <script src="http://static.geetest.com/static/tools/gt.js"></script>
 <script src = "/lib/jquery.validate.min.js"></script>
 <script charset="utf-8" src ="/lib/jquerysession.js"></script>
@@ -21,6 +20,7 @@
 <% if (error) { %>
 	<div class="message-prompt error"><span><%= error %></span></div>
 <% } %>
+
 <searchbox modal-open = "modalOpen"></searchbox>
 <div id = "nav" >
   <div class = "nav-center" >
@@ -61,10 +61,12 @@
 	
 	var user = "";
 	if('<%=user%>') {
-		var user = <%- JSON.stringify(user)%>;
+		var user = JSON.parse('<%- JSON.stringify(user)%>');
 	}
 </script>
 <script src="/lib/angular.min.js"></script> 
 <script src="/lib/angular-ui-router.min.js"></script>
 <script src="/lib/angular-file-upload.min.js"></script>
+<script src="/lib/ui-bootstrap/ui-bootstrap.js"></script>
+<script src="/lib/ui-bootstrap/ui-bootstrap-tpls.js"></script>
 <script src="/javascripts/header.js"></script> 

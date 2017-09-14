@@ -4,11 +4,6 @@
  	
  	var req_user = <%- JSON.stringify(req_user)%>;
 	
-	var user = "";
-	if('<%=user%>'){
-		var user = <%- JSON.stringify(user)%>;
-	}
-	
 </script>
 <div id = "nav2"></div>
 <div class = "container" ng-controller = "homeController" ng-init = "requid = '<%=req_user._id%>' ; completed = false">
@@ -44,8 +39,8 @@
 				<li><a ui-sref = "myarticle">发布的文章</a></li>
 				<li><a ui-sref ="mydrafts">草稿箱</a></li>
 				<li><a ui-sref ="mychecking">待审核文章</a></li>
-				<li><a href="">未通过文章</a></li>
-				<li><a href="">回收站</a></li>
+				<li><a ui-sref ="myfail">未通过文章</a></li>
+				<li><a ui-sref ="mytrash">回收站</a></li>
 				<li>
 					<a href="/updateuserinfo">用户设置</a>
 				</li>
