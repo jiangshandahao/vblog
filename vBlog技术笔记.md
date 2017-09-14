@@ -78,4 +78,21 @@ wordCount:true
  - 页面结构文件地址： `ueditor/dialogs/image/image.html`
  - 逻辑代码文件地址： `ueditor/dialogs/image/image.js` , 包括 ***远程图片/上传图片/在线图片/搜索图片*** 
 
+# 代码高亮－SyntaxHighlighter
+##自动换行
+找到SyntaxHighlighter所在目录，根据`\third-party\SyntaxHighlighter\shCoreDefault.css`这个路径找到这个文件，然后找到syntaxhighlighter这个类，在这个类下面加上`word-break:break-all;`强制换行即可。
+
+```
+.syntaxhighlighter {
+    width:100%!important;
+    margin:.3em 0 .3em 0!important;
+    position:relative!important;
+    overflow:auto!important;
+    background-color:#f5f5f5!important;
+    border:1px solid #ccc!important;
+    border-radius:4px!important;
+    border-collapse:separate!important;
+    word-break:break-all;
+}
+```
 

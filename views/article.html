@@ -1,8 +1,10 @@
 <%- include header %>
+<link rel="stylesheet" href="/lib/SyntaxHighlighter/shCoreDefault.css">
+<script type="text/javascript" charset="utf-8" src="/lib/SyntaxHighlighter/shCore.js"></script>
 <script type="text/javascript">
 
 	var article = <%- JSON.stringify(article)%>; 
-	
+	SyntaxHighlighter.all();
 </script>
 <div id = "nav2"></div>
 
