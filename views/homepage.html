@@ -5,7 +5,6 @@
  	var req_user = <%- JSON.stringify(req_user)%>;
 	
 </script>
-<script src = "/lib/bootstrap.min.js"></script>
 
 <div id = "nav2"></div>
 <div class = "container" ng-controller = "homeController" ng-init = "requid = '<%=req_user._id%>' ; completed = false">
@@ -26,6 +25,7 @@
         </div>
         <div class="author-name">
             <a href="#"><%=req_user.username%></a>
+          
         </div>
        
         <ul class="author-article-pl">

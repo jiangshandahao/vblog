@@ -41,6 +41,14 @@ function beforeArticleSave(req){
 			status: status
 		},
 		update:{
+			author_info: {
+				username: req.session.user.username,
+				mobile: req.session.user.mobile,
+				email: req.session.user.email,
+				avatar: 'http://resources.vcaomao.com/images/default@256.jpg',
+				signature: req.session.user.signature,
+				badge: req.session.user.badge
+			},
 			atitle: req.body.title,
 			adate: new Date(),
 			modified_date: new Date(),
@@ -135,12 +143,15 @@ exports.getUserAritcles = function(req, res){
 	}
 	
 	var uid = !req.query.requid == false ? req.query.requid : req.session.user._id;
+	var numPerPage = 8; 
+	var nowPage = !req.query.nowpage == false ? req.query.nowpage : 1;
 	//console.log(uid);
 	ArticleModel.find({ 
 		author_id: new ObjectID(uid),
 		status: status
 	})
-	.limit(8)
+	.limit(numPerPage)
+	.skip(numPerPage*(nowPage-1))
 	.sort({modified_date: -1})
 	.exec(function(err, articles) {
 		if(err){
@@ -241,7 +252,9 @@ exports.updateArticleStatus = function(req, res) {
 				
 				article.update({
 						$set: {
-							status:status
+							status:status,
+							modified_date:new Date(),
+							adate:new Date()
 						}
 					})
 					.exec(function(err, updatedArticle) {
@@ -402,23 +415,36 @@ exports.markArticleHandler = function(req, res) {
 exports.getChannelArticles = function(req, res){
 	
 	var channel = !req.query.channel ? "" : req.query.channel;
+	var numPerPage = 8; 
+	var nowPage = !req.query.nowpage == false ? req.query.nowpage : 1;
+	var asyn = !req.query.asyn == false ? req.query.asyn : '';
 	ArticleModel.find({
 			mychannel: channel
 //			status: 3
 		})
-		.sort({"adate": -1})
+		
+		.limit(numPerPage)
+		.skip(numPerPage*(nowPage-1))
+		.sort({
+			"adate": -1
+		})
 		.exec(function(err, articles) {
 			if(err) {
 				req.flash('error', "获取文章失败");
 				res.redirect('/');
 			} else {
-				res.render('search_articles', {
-					title: channel,
-					user: req.session.user,
-					articles: articles,
-					success: req.flash('success').toString(),
-					error: req.flash('error').toString()
-				});
+				if(asyn === 'asyn'){
+					res.send(articles);
+				}else{
+					res.render('search_articles', {
+						title: channel,
+						user: req.session.user,
+						articles: articles,
+						success: req.flash('success').toString(),
+						error: req.flash('error').toString()
+					});
+				}
+				
 			}
 	
 		});

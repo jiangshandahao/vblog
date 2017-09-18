@@ -1,7 +1,6 @@
 <div>
 <h2>{{page_title}}</h2>
 
-<div style = "padding: 16px; text-align: center;" ng-if = "!completed"><img src = "../images/loading.gif" /></div>
 
 <div ng-if = "completed" >
 <p class = "zanwu" ng-if = "!myfriends.length">暂无朋友</p>
@@ -15,10 +14,12 @@
 		</a>
 	</div>
 	<div class="mob-friendinfo">
-		<h3><a href="/u/{{myfriend.username}}" target="_blank">{{myfriend.username}}</a></h3>
+		<h3><a href="/u/{{myfriend.username}}" target="_blank">{{$index}}{{myfriend.username}}</a></h3>
 		<div class="mob-sub">{{myfriend.signature}}</div>
 	</div>
 </div>  
 </div>
 
+<div style = "padding: 16px; text-align: center;" ng-if = "!completed"><img src = "../images/loading.gif" /></div>
+<div class="get-mod-more transition" ng-click = "getMore()" ng-if = "myfriends.length">{{getMoreText}}</div>
 </div>

@@ -1,12 +1,15 @@
 //获取频道服务
 app.factory('homeService', ['$http', function($http) {
 	var factoryDefinitions = {
-		getArticles: function(type, requid) {
+		getArticles: function(type, nowPage, requid) {
+			var url = "http://localhost:3000/getarticles?type=" + type ;
 			if(requid){
-				var url = "http://localhost:3000/getarticles?type=" + type + "&requid=" + requid;
-			}else{
-				var url = "http://localhost:3000/getarticles?type=" + type ;
+				url += "&requid="+ requid;
 			}
+			if(nowPage){
+				url += "&nowpage=" + nowPage;
+			}
+			console.log(url);
 			var res = $http.get(url);
 			res.success(function(data, status, headers, config) {
 				if(!data.error) {
@@ -25,8 +28,49 @@ app.factory('homeService', ['$http', function($http) {
 			});
 			return res;
 		},
-		getUserInfo:function(){
-			var res = $http.get("http://localhost:3000/getuserinfo");
+		getUserInfo:function(nowPage,requid){
+			var url = "http://localhost:3000/getuserinfo?uid=";
+			if(requid) {
+				url +=  requid;
+			}
+			if(nowPage) {
+				url += "&nowpage=" + nowPage;
+			}
+			var res = $http.get(url);
+			res.success(function(data, status, headers, config) {
+				if(!data.error) {
+					return data;
+				}
+			});
+			return res;
+		},
+		getUserMarks:function(nowPage, requid){
+			var url = "http://localhost:3000/usermarks?requid=";
+			if(requid) {
+				url += requid;
+			}
+			if(nowPage) {
+				url += "&nowpage=" + nowPage;
+			}
+			console.log(url);
+			var res = $http.get(url);
+			res.success(function(data, status, headers, config) {
+				if(!data.error) {
+					return data;
+				}
+			});
+			return res;
+		},
+		getUserGoods:function(nowPage, requid){
+			var url = "http://localhost:3000/usergoods?requid=";
+			if(requid) {
+				url +=  requid;
+			}
+			if(nowPage) {
+				url += "&nowpage=" + nowPage;
+			}
+			console.log(url);
+			var res = $http.get(url);
 			res.success(function(data, status, headers, config) {
 				if(!data.error) {
 					return data;
@@ -222,11 +266,32 @@ app.config(function($stateProvider, $urlRouterProvider){
 			$scope.page_title = "文章列表";
 			$scope.is_now_user = is_now_user;
 			$scope.status = 3;
-			
-			homeService.getArticles("drafts",$scope.requid).then(function(result) {
+			$scope.nowPageNum = 1; 
+			$scope.canGetMore = true;
+			$scope.getMoreText = "点击加载更多";
+			homeService.getArticles("drafts",1,$scope.requid).then(function(result) {
 				$scope.completed = true;
 				$scope.myarticles = result.data;
+				if(result.data.length < 8) {
+					$scope.canGetMore = false;
+					$scope.getMoreText = "已经没有更多了";
+				}
 			});
+			
+			$scope.getMore = function(){
+				if($scope.canGetMore){
+					$scope.nowPageNum++;
+					homeService.getArticles("drafts", $scope.nowPageNum, $scope.requid).then(function(result) {
+						$scope.completed = true;
+						$scope.myarticles = $scope.myarticles.concat(result.data);
+						if(result.data.length < 8) {
+							$scope.canGetMore = false;
+							$scope.getMoreText = "已经没有更多了";
+						}
+					});
+				}
+			};
+			
 		}
 	});
 	
@@ -237,11 +302,30 @@ app.config(function($stateProvider, $urlRouterProvider){
 			$scope.page_title = "草稿箱";
 			$scope.is_now_user = is_now_user;
 			$scope.status = 1;
+			$scope.nowPageNum = 1;
+			$scope.canGetMore = true;
+			$scope.getMoreText = "点击加载更多";
 			homeService.getArticles("drafts").then(function(result) {
 				$scope.completed = true;
 				$scope.myarticles = result.data;
+				if(result.data.length < 8) {
+					$scope.canGetMore = false;
+					$scope.getMoreText = "已经没有更多了";
+				}
 			});
-
+			$scope.getMore = function() {
+				if($scope.canGetMore) {
+					$scope.nowPageNum++;
+					homeService.getArticles("drafts",$scope.nowPageNum).then(function(result) {
+						$scope.completed = true;
+						$scope.myarticles = $scope.myarticles.concat(result.data);
+						if(result.data.length < 8) {
+							$scope.canGetMore = false;
+							$scope.getMoreText = "已经没有更多了";
+						}
+					});
+				}
+			};
 		}
 	});
 	
@@ -252,11 +336,30 @@ app.config(function($stateProvider, $urlRouterProvider){
 			$scope.page_title = "待审核文章";
 			$scope.is_now_user = is_now_user;
 			$scope.status = 2;
-			
+			$scope.nowPageNum = 1;
+			$scope.canGetMore = true;
+			$scope.getMoreText = "点击加载更多";
 			homeService.getArticles("checking").then(function(result) {
 				$scope.completed = true;
 				$scope.myarticles = result.data;
+				if(result.data.length < 8) {
+					$scope.canGetMore = false;
+					$scope.getMoreText = "已经没有更多了";
+				}
 			});
+			$scope.getMore = function(){
+				if($scope.canGetMore){
+					$scope.nowPageNum++;
+					homeService.getArticles("checking", $scope.nowPageNum).then(function(result) {
+						$scope.completed = true;
+						$scope.myarticles = $scope.myarticles.concat(result.data);
+						if(result.data.length < 8) {
+							$scope.canGetMore = false;
+							$scope.getMoreText = "已经没有更多了";
+						}
+					});
+				}
+			};
 		}
 	});
 	
@@ -267,11 +370,30 @@ app.config(function($stateProvider, $urlRouterProvider){
 			$scope.page_title = "未通过文章";
 			$scope.is_now_user = is_now_user;
 			$scope.status = 5;
-	
+			$scope.nowPageNum = 1;
+			$scope.canGetMore = true;
+			$scope.getMoreText = "点击加载更多";
 			homeService.getArticles("fail").then(function(result) {
 				$scope.completed = true;
 				$scope.myarticles = result.data;
+				if(result.data.length < 8) {
+					$scope.canGetMore = false;
+					$scope.getMoreText = "已经没有更多了";
+				}
 			});
+			$scope.getMore = function() {
+				if($scope.canGetMore) {
+					$scope.nowPageNum++;
+					homeService.getArticles("fail", $scope.nowPageNum).then(function(result) {
+						$scope.completed = true;
+						$scope.myarticles = $scope.myarticles.concat(result.data);
+						if(result.data.length < 8) {
+							$scope.canGetMore = false;
+							$scope.getMoreText = "已经没有更多了";
+						}
+					});
+				}
+			};
 		}
 	});
 	
@@ -282,41 +404,95 @@ app.config(function($stateProvider, $urlRouterProvider){
 			$scope.page_title = "回收站";
 			$scope.is_now_user = is_now_user;
 			$scope.status = 4;
+			$scope.nowPageNum = 1;
+			$scope.canGetMore = true;
+			$scope.getMoreText = "点击加载更多";
 			
 			homeService.getArticles("trash").then(function(result) {
 				$scope.completed = true;
 				$scope.myarticles = result.data;
+				if(result.data.length < 8) {
+					$scope.canGetMore = false;
+					$scope.getMoreText = "已经没有更多了";
+				}
 			});
+			$scope.getMore = function() {
+				if($scope.canGetMore) {
+					$scope.nowPageNum++;
+					homeService.getArticles("trash", $scope.nowPageNum).then(function(result) {
+						$scope.completed = true;
+						$scope.myarticles = $scope.myarticles.concat(result.data);
+						if(result.data.length < 8) {
+							$scope.canGetMore = false;
+							$scope.getMoreText = "已经没有更多了";
+						}
+					});
+				}
+			};
 		}
 	});
 	
 	$stateProvider.state("marks", {
 		url: "/marks",
 		templateUrl: "../template/myarticle.html",
-		controller: function($scope, $http ) {
+		controller: function($scope, $http, homeService) {
 			$scope.page_title = "收藏的文章";
-			var res = $http.get("http://localhost:3000/usermarks?requid=" + $scope.requid);
-			res.success(function(data, status, headers, config) {
+			$scope.nowPageNum = 1;
+			$scope.canGetMore = true;
+			$scope.getMoreText = "点击加载更多";
+			homeService.getUserMarks().then(function(result) {
 				$scope.completed = true;
-				$scope.myarticles = data;
-			}).error(function(data, status, headers, config) {
-				console.log("获取文章列表失败");
+				$scope.myarticles = result.data;
+				if(result.data.length < 8) {
+					$scope.canGetMore = false;
+					$scope.getMoreText = "已经没有更多了";
+				}
 			});
+			$scope.getMore = function() {
+				if($scope.canGetMore) {
+					$scope.nowPageNum++;
+					homeService.getUserMarks($scope.nowPageNum).then(function(result) {
+						$scope.completed = true;
+						$scope.myarticles = $scope.myarticles.concat(result.data);
+						if(result.data.length < 8) {
+							$scope.canGetMore = false;
+							$scope.getMoreText = "已经没有更多了";
+						}
+					});
+				}
+			};
 		}
 	});
 	
 	$stateProvider.state("goods", {
 		url: "/goods",
 		templateUrl: "../template/myarticle.html",
-		controller: function($scope, $http) {
+		controller: function($scope, $http, homeService) {
 			$scope.page_title = "点赞的文章";
-			var res = $http.get("http://localhost:3000/usergoods?requid=" + $scope.requid);
-			res.success(function(data, status, headers, config) {
+			$scope.nowPageNum = 1;
+			$scope.canGetMore = true;
+			$scope.getMoreText = "点击加载更多";
+			homeService.getUserGoods().then(function(result) {
 				$scope.completed = true;
-				$scope.myarticles = data;
-			}).error(function(data, status, headers, config) {
-				console.log("获取文章列表失败");
+				$scope.myarticles = result.data;
+				if(result.data.length < 8) {
+					$scope.canGetMore = false;
+					$scope.getMoreText = "已经没有更多了";
+				}
 			});
+			$scope.getMore = function() {
+				if($scope.canGetMore) {
+					$scope.nowPageNum++;
+					homeService.getUserGoods($scope.nowPageNum).then(function(result) {
+						$scope.completed = true;
+						$scope.myarticles = $scope.myarticles.concat(result.data);
+						if(result.data.length < 8) {
+							$scope.canGetMore = false;
+							$scope.getMoreText = "已经没有更多了";
+						}
+					});
+				}
+			};
 		}
 	});
 	
@@ -325,18 +501,54 @@ app.config(function($stateProvider, $urlRouterProvider){
 		templateUrl: "../template/friends.html",
 		controller: function($scope, $http, homeService) {
 			$scope.page_title = "我的关注";
+			$scope.nowPageNum = 1;
+			$scope.numPerPage = 8;
+			$scope.canGetMore = true;
+			$scope.getMoreText = "点击加载更多";
 			homeService.getUserInfo().then(function(result) {
 				$scope.completed = true;
-				result.data.idols.forEach(function(v){//遍历每一个关注了的用户对象
+				$scope.datas = result.data;
+				var start = ($scope.nowPageNum - 1) * $scope.numPerPage;
+				var pend = start + $scope.numPerPage;
+				var end = (pend > result.data.idols.length) ? result.data.idols.length : pend;
+				
+				var nowData = result.data.idols.slice(start, end);
+				
+				nowData.forEach(function(v){//遍历每一个关注了的用户对象
 					var fOrNot = result.data.followers.some(function(follower){
 						return follower._id === v._id;
 					});
 					v.statusText = fOrNot ? '互相关注': '已关注';
 				});
-				$scope.myfriends = result.data.idols;
-
-				
+				$scope.myfriends = nowData;
+				if(nowData.length < 8) {
+					$scope.canGetMore = false;
+					$scope.getMoreText = "已经没有更多了";
+				}
 			});
+			$scope.getMore = function() {
+				if($scope.canGetMore) {
+					$scope.nowPageNum++;
+					var start = ($scope.nowPageNum - 1) * $scope.numPerPage;
+					var pend = start + $scope.numPerPage;
+					var end = (pend > $scope.datas.idols.length) ? $scope.datas.idols.length : pend;
+					
+					console.log(start, end);
+					var nowData = $scope.datas.idols.slice(start, end);
+					console.log(nowData);
+					nowData.forEach(function(v){//遍历每一个关注了的用户对象
+						var fOrNot = $scope.datas.followers.some(function(follower){
+							return follower._id === v._id;
+						});
+						v.statusText = fOrNot ? '互相关注': '已关注';
+					});
+					$scope.myfriends = $scope.myfriends.concat(nowData);
+					if(nowData.length < 8) {
+						$scope.canGetMore = false;
+						$scope.getMoreText = "已经没有更多了";
+					}
+				}
+			};
 		}
 	});
 	
@@ -345,16 +557,54 @@ app.config(function($stateProvider, $urlRouterProvider){
 		templateUrl: "../template/friends.html",
 		controller: function($scope, $http, homeService) {
 			$scope.page_title = "我的粉丝";
+			$scope.nowPageNum = 1;
+			$scope.numPerPage = 8;
+			$scope.canGetMore = true;
+			$scope.getMoreText = "点击加载更多";
 			homeService.getUserInfo().then(function(result) {
 				$scope.completed = true;
-				result.data.followers.forEach(function(v) { //遍历每一个关注了的用户对象
-					var fOrNot = result.data.idols.some(function(idol) {
+				$scope.datas = result.data;
+				var start = ($scope.nowPageNum - 1) * $scope.numPerPage;
+				var pend = start + $scope.numPerPage;
+				var end = (pend > result.data.followers.length) ? result.data.followers.length : pend;
+				
+				var nowData = result.data.followers.slice(start, end);
+				
+				nowData.forEach(function(v){//遍历每一个关注了的用户对象
+					var fOrNot = result.data.idols.some(function(idol){
 						return idol._id === v._id;
 					});
-					v.statusText = fOrNot ? '互相关注' : '被关注';
+					v.statusText = fOrNot ? '互相关注': '已关注';
 				});
-				$scope.myfriends = result.data.followers;
+				$scope.myfriends = nowData;
+				if(nowData.length < 8) {
+					$scope.canGetMore = false;
+					$scope.getMoreText = "已经没有更多了";
+				}
 			});
+			$scope.getMore = function() {
+				if($scope.canGetMore) {
+					$scope.nowPageNum++;
+					var start = ($scope.nowPageNum - 1) * $scope.numPerPage;
+					var pend = start + $scope.numPerPage;
+					var end = (pend > $scope.datas.followers.length) ? $scope.datas.followers.length : pend;
+					
+					console.log(start, end);
+					var nowData = $scope.datas.followers.slice(start, end);
+					console.log(nowData);
+					nowData.forEach(function(v){//遍历每一个关注了的用户对象
+						var fOrNot = $scope.datas.idols.some(function(idol){
+							return idol._id === v._id;
+						});
+						v.statusText = fOrNot ? '互相关注': '已关注';
+					});
+					$scope.myfriends = $scope.myfriends.concat(nowData);
+					if(nowData.length < 8) {
+						$scope.canGetMore = false;
+						$scope.getMoreText = "已经没有更多了";
+					}
+				}
+			};
 		}
 	});
 	

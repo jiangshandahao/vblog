@@ -100,7 +100,7 @@ exports.signUp = function(req, res){
   	'username':req.body.username,
   	'mobile':req.body.mobile,
   	'avatar':'http://resources.vcaomao.com/images/default@256.jpg',
-  	'signature':'Ta很懒，什么也没留下',
+  	'signature':'微草帽的个人签名',
   	'hashed_password': hashPW(req.body.password)
   });  
   

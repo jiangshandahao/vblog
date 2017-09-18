@@ -64,7 +64,9 @@ exports.saveGoodArticle = function(req, res, next){
 						var userinfoModel = new UserInfoModel({
 							user_id: req.body.uid,
 							marks: [],
-							goods: [req.body.article]
+							goods: [req.body.article],
+							followers: [],
+							idols: []
 						});
 						
 						userinfoModel.save(function(err, userinfo) {
@@ -174,15 +176,22 @@ exports.saveMarkArticle = function(req, res, next){
 //获取用户收藏的文章
 exports.getUserMarks = function(req, res){
 	var uid = !req.query.requid == false ? req.query.requid : req.session.user._id;
+	var numPerPage = 8;
+	var nowPage = !req.query.nowpage == false ? req.query.nowpage : 1;
+	
 	UserInfoModel.findOne({
 			user_id: new ObjectID(uid)
 		})
+		
 		.exec(function(err, userinfo) {
 			if(err) {
 				req.flash('error', "获取收藏文章列表失败");
 				res.json([]);
 			} else {
-				res.json(userinfo.marks);
+				var start = (nowPage - 1) * numPerPage;
+				var pend = start + numPerPage;
+				var end = (pend > userinfo.marks.length) ? userinfo.marks.length : pend;
+				res.json(userinfo.marks.slice(start, end));
 			}
 	
 		});
@@ -191,6 +200,8 @@ exports.getUserMarks = function(req, res){
 //获取用户点赞的文章
 exports.getUserGoods = function(req, res){
 	var uid = !req.query.requid == false ? req.query.requid : req.session.user._id;
+	var numPerPage = 8;
+	var nowPage = !req.query.nowpage == false ? req.query.nowpage : 1;
 	UserInfoModel.findOne({
 			user_id: new ObjectID(uid)
 		})
@@ -199,7 +210,10 @@ exports.getUserGoods = function(req, res){
 				req.flash('error', "获取收藏文章列表失败");
 				res.json([]);
 			} else {
-				res.json(userinfo.goods);
+				var start = (nowPage - 1) * numPerPage;
+				var pend = start + numPerPage;
+				var end = (pend > userinfo.goods.length) ? userinfo.goods.length : pend;
+				res.json(userinfo.goods.slice(start, end));
 			}
 	
 		});
@@ -208,6 +222,7 @@ exports.getUserGoods = function(req, res){
 //获取指定ID的用户关注
 exports.getUserInfoById = function(req, res){
 	var uid = !req.query.uid == false ? req.query.uid : req.session.user._id;
+	
 	UserInfoModel.findOne({
 			user_id: new ObjectID(uid)
 		})
@@ -228,7 +243,6 @@ exports.getUserInfoById = function(req, res){
 	
 		});
 };
-
 
 //我关注别人--> 向别人用户的followers写入数据
 exports.saveFollow = function(req, res, next){

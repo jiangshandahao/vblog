@@ -396,7 +396,10 @@ overflow: hidden;
     line-height: 24px;
     font-size:14px;
 }
-
+.author-signature a{
+	color:#666;
+	font-size: 12px;
+}
 .mob-author .time {
     margin-left: 20px;
     color: #bbb;

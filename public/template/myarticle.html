@@ -14,7 +14,6 @@
             取消</button>
 	</div>
 </script>
-<div style = "padding: 16px; text-align: center;" ng-if = "!completed"><img src = "../images/loading.gif" /></div>
 
 <div ng-if = "completed" >
 <p class = "zanwu" ng-if = "!myarticles.length">暂无文章</p>
@@ -45,7 +44,7 @@
 		</a>
 	</div>
 	<div class="mob-ctt">
-		<h3><a href="/article/{{myarticle._id}}" target="_blank">{{myarticle.atitle}}</a></h3>
+		<h3><a href="/article/{{myarticle._id}}" target="_blank">{{$index}}{{myarticle.atitle}}</a></h3>
 
 		<div class="mob-author">
 			<div class="author-face">
@@ -56,11 +55,12 @@
 			</a>
 			<span class="time">{{myarticle.adate | toTimeDiff}}</span>
 			<i class="icon icon-fvr"></i><em>{{myarticle.amark.length}}</em>
-			<i class="icon icon-dianzan"></i><em>{{myarticle.agood.length }}</em>
+			<i class="icon icon-dianzan"></i><em>{{myarticle.agood.length}}</em>
 		</div>
 		<div class="mob-sub">{{myarticle.abrief}}</div>
 	</div>
 </div>  
 </div>
-
+<div style = "padding: 16px; text-align: center;" ng-if = "!completed"><img src = "../images/loading.gif" /></div>
+<div class="get-mod-more transition" ng-click = "getMore()" ng-if = "myarticles.length">{{getMoreText}}</div>
 </div>
